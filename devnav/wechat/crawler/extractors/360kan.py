@@ -21,7 +21,10 @@ def process(keyword,page):
     urlinfos=[]
     page = ct.crawlerTool.getPage(url)
     #tv
-    segments = ct.crawlerTool.getXpath("/html/body/div[2]/div[1]/div[1]/div[3]/div/div[2]/div/div//div[@class='b-series-number-container g-clear']/a",page)
+    detailsPage = ct.crawlerTool.getXpath('//div[@class="b-mainpic"]/a/@href',page)[0]
+    detailsPageData = ct.crawlerTool.getPage(detailsPage)
+    aLevelTitle = ct.crawlerTool.getXpath('//div[@class="title-left g-clear"]/h1/text()',detailsPageData)[0]
+    segments = ct.crawlerTool.getXpath('//div[@class="num-tab-main g-clear js-tab"]/a',detailsPageData)
     if segments:
         for segment in segments:
             try:
@@ -29,8 +32,13 @@ def process(keyword,page):
                 urlinfo={}
                 localurl=ct.getRegex('(http.*?)\?', ct.getXpath('//a/@href',segment)[0])
                 if localurl:
+                    if 'youku' in localurl and 'url=' in localurl:
+                        localurl = ct.getRegex('url=(.*?html)&', localurl)
+                    else：
+                        localurl = localurl
                     urlinfo['url']= "http://api.baiyug.cn/vip/index.php?url=" + localurl
-                    urlinfo['title'] =  HTMLParser().unescape(ct.getXpath('//a/text()',segment)[0])
+                    title =HTMLParser().unescape(ct.getXpath('//a/text()',segment)[0]).replace('\r\n','')
+                    urlinfo['title'] =  aLevelTitle+' '+title.strip()
                     urlinfos.append(urlinfo)
                 else:
                     pass
