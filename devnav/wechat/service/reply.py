@@ -60,7 +60,9 @@ def results_toString(rs):  #限制貌似是不能超过2048字节
     strSum = 0
     rs.reverse()#倒序排列 这操作会改变原来的数组
     for resultStr in rs:
-        if strSum > 2000: break
+        if strSum > 1970:
+            crawlerReply = crawlerReply + '回复数字集数显示未显示集数'
+            break
         for s in resultStr:
             if s.isdigit()|s.isalpha()|s.isspace():strSum+=1
             else:strSum+=4
