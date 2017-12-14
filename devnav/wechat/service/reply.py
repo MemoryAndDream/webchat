@@ -117,7 +117,7 @@ def search_resource(queryString,userOpenId='',mod=''):
 
 def save_resource(title,url,keyword,userOpenId='',uploader='system'):
     try:
-        r = Resource_Cache.get_or_create(keyword=keyword,url=url,OpenID=userOpenId)[0]#一个用户的同一搜索只能存一条
+        r = Resource_Cache.objects.get_or_create(keyword=keyword,url=url,OpenID=userOpenId)[0]#一个用户的同一搜索只能存一条
         r.title=title
         r.uploader = uploader
         r.create_time = datetime.datetime.now()
