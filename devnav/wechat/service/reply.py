@@ -96,11 +96,11 @@ def search_resource(queryString,userOpenId='',mod=''):
         import re
         if re.match('\d+',queryString):
             start = now - datetime.timedelta(hours=23, minutes=59, seconds=59)
-            resources = Resource_Cache.objects.filter(OpenID__iexact=userOpenId).filter(create_time__gt=start).filter(title__endswith=' '+queryString + '_' + mod).order_by("-create_time").distinct('url')[:10]
+            resources = Resource_Cache.objects.filter(OpenID__iexact=userOpenId).filter(create_time__gt=start).filter(title__endswith=' '+queryString + '_' + mod).order_by("-create_time")[:10]
 
         else:
             start = now-datetime.timedelta(hours=23, minutes=59, seconds=59)#缓存一小时的数据 读取缓存需要修改用户id  缓存和上面的逻辑有冲突
-            resources = Resource_Cache.objects.filter(create_time__gt=start).filter(keyword__iexact=queryString+'_'+mod).distinct('url')[:10]#后面需要加更多限制 反正也显示不了10条
+            resources = Resource_Cache.objects.filter(create_time__gt=start).filter(keyword__iexact=queryString+'_'+mod)[:10]#后面需要加更多限制 反正也显示不了10条
         result=[]
 
         for resource in resources:
@@ -116,12 +116,9 @@ def search_resource(queryString,userOpenId='',mod=''):
 
 def save_resource(title,url,keyword,userOpenId='',uploader='system'):
     try:
-        r = Resource_Cache()
+        r = Resource_Cache.get_or_create(keyword=keyword,url=url,OpenID=userOpenId)[0]#一个用户的同一搜索只能存一条
         r.title=title
-        r.url = url
-        r.keyword = keyword
         r.uploader = uploader
-        r.OpenID = userOpenId
         r.create_time = datetime.datetime.now()
         r.save()
     except Exception,e:
