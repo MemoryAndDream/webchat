@@ -57,7 +57,7 @@ def crawler(keyword,userOpenId='',sites=[19],mod=''):
    # result =  '\n'.join(rs)  #限制貌似是不能超过2048字节
     crawlerReply = ''
     strSum = 0
-    #rs.reverse()#倒序排列
+    rs.reverse()#倒序排列
     for resultStr in rs:
         if strSum > 2000: break
         for s in resultStr:
