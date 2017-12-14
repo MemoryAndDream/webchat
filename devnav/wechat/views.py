@@ -71,7 +71,9 @@ def autoreply(request):
                 replyContent = reply(MsgContent=MsgContent, userOpenId=toUser, mod='qgg')['reply']
             else:
                 import re
-                if MsgContent.startswith('qgg ') or re.match('\d+',MsgContent):
+                if  re.match('\d+',MsgContent):
+                    replyContent = reply(MsgContent=MsgContent, userOpenId=toUser, mod='qgg')['reply']
+                elif MsgContent.startswith('qgg '):
                     keyword = MsgContent[4:]
                     replyContent = reply(MsgContent=keyword, userOpenId=toUser,mod='qgg')['reply']
                 elif MsgContent :
