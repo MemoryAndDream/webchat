@@ -55,8 +55,8 @@ def autoreply(request):
 
 
 
-        toUser = FromUserName
-        fromUser = ToUserName
+        toUser = FromUserName#用户openid
+        fromUser = ToUserName#微信公众号的openid
         #print MsgContent
         if msg_type == 'text':
             #print MsgContent
@@ -67,15 +67,17 @@ def autoreply(request):
                 if len(learnContent)>1:
                     replyContent = learn(learnContent[0],learnContent[1])
                 else:replyContent = learn(learnContent[0])
-            if MsgContent.startswith('qgg '):
-                keyword = MsgContent[4:]
-                replyContent = reply(MsgContent=keyword, userOpenId=fromUser,mod='qgg')['reply']
-            elif MsgContent :
-                replyContent = reply(MsgContent=MsgContent,userOpenId=fromUser)['reply']#传入的是公众号的openid？
-
-                #print 'shucu'
+            if fromUser == 'gh_af4058d792a2':#abc快看
+                replyContent = reply(MsgContent=MsgContent, userOpenId=toUser, mod='qgg')['reply']
             else:
-                replyContent = "这公众号傻逼了"
+                if MsgContent.startswith('qgg '):
+                    keyword = MsgContent[4:]
+                    replyContent = reply(MsgContent=keyword, userOpenId=toUser,mod='qgg')['reply']
+                elif MsgContent :
+                    replyContent = reply(MsgContent=MsgContent,userOpenId=toUser)['reply']#传入用户的openid？
+                    #print 'shucu'
+                else:
+                    replyContent = "这公众号傻逼了"
             logger.info('out:' + str(replyContent))
             replyMsg = TextMsg(toUser, fromUser, replyContent)
             #print "成功了!!!!!!!!!!!!!!!!!!!"

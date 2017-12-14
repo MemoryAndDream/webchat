@@ -15,7 +15,7 @@ from ..crawler.mainprocess import keywordSearch
 logger = logging.getLogger('default')
 
 def reply(MsgContent,userOpenId='',mod=''):
-    queryResult = search_resource(MsgContent+'_'+mod,userOpenId)
+    queryResult = search_resource(MsgContent,userOpenId,mod=mod)
     if queryResult:#这个逻辑后面得改，不兼容搜索，要么就是根据公众号类型不同返回
        return {'reply': queryResult, 'mode': 0}
     #如果有资源就返回资源，如果没有就骂人 ,切换模式，模式需要在用户session中记录 输入别骂了才能切换回来 或者设置资源的前缀，不合法的都骂
@@ -53,11 +53,12 @@ def crawler(keyword,userOpenId='',sites=[19],mod=''):
         rs.append('''<a href='%s'>%s</a> '''%(url,title))
         if title and url:
             save_resource(title+'_'+mod,url,keyword,userOpenId=userOpenId)
+    return results_toString(rs)
 
-   # result =  '\n'.join(rs)  #限制貌似是不能超过2048字节
+def results_toString(rs):  #限制貌似是不能超过2048字节
     crawlerReply = ''
     strSum = 0
-    rs.reverse()#倒序排列
+    rs.reverse()#倒序排列 这操作会改变原来的数组
     for resultStr in rs:
         if strSum > 2000: break
         for s in resultStr:
@@ -65,11 +66,7 @@ def crawler(keyword,userOpenId='',sites=[19],mod=''):
             else:strSum+=4
             crawlerReply = crawlerReply + s
         crawlerReply = crawlerReply + '\n\n'
-
-
-
-    #logger.debug(result)
-    return crawlerReply
+        return crawlerReply
 
 
 #带权重随机
@@ -90,15 +87,22 @@ def weight_choice(list):
         if sumChoice>= choiceInt:
             return value
 
-def search_resource(queryString,userOpenId=''):
+def search_resource(queryString,userOpenId='',mod=''):
     try:
+        #这里增加一个逻辑 如果用户输入数字，则先去数据库里搜索最近一分钟title包含 数字_的结果 按时间倒序排列
         now = datetime.datetime.now()
-        start = now-datetime.timedelta(hours=23, minutes=59, seconds=59)#缓存一天的数据
-        resources = Resource_Cache.objects.filter(create_time__gt=start).filter(keyword__iexact=queryString)[:10]#后面需要加更多限制 反正也显示不了10条
+        import re
+        if re.match('\d+',queryString):
+            start = now - datetime.timedelta(hours=23, minutes=59, seconds=59)
+            resources = Resource_Cache.objects.filter(create_time__gt=start).filter(OpenID__iexact=userOpenId).filter(title__endswith=queryString + '_' + mod).order_by("-create_time")[:10]
+
+        else:
+            start = now-datetime.timedelta(hours=23, minutes=59, seconds=59)#缓存一小时的数据 缓存没有继续搜索的功能。。。
+            resources = Resource_Cache.objects.filter(create_time__gt=start).filter(keyword__iexact=queryString+'_'+mod)[:10]#后面需要加更多限制 反正也显示不了10条
         result=[]
         for resource in resources:
             result.append('''<a href='%s'>%s</a> '''%(resource.url,resource.title))
-        output = '\n'.join(result)
+        output = results_toString(result)
     except Exception,e:
         logger.error(str(e))
     return output
