@@ -87,7 +87,10 @@ def autoreply(request):
             Event  = xmlData.find('Event').text
             #订阅事件
             if Event == 'subscribe':
-                content = "欢迎订阅本公众号，输入资源名查询百度云资源，输入qgg 资源名 获取各大视频网站免会员去广告视频入口" \
+                if fromUser == 'gh_af4058d792a2':
+                    content = "欢迎订阅本公众号，输入资源名 搜索并获取各大视频网站免会员去广告视频入口"
+                else:
+                    content = "欢迎订阅本公众号，输入资源名查询百度云资源，输入qgg 资源名 获取各大视频网站免会员去广告视频入口" \
                           "搜索时请具体一些，比如权力的游戏 第六季 或qgg 爱情公寓4"
                 replyMsg = TextMsg(toUser, fromUser, content)
                 logger.info('login: from'+str(FromUserName)+' to '+str(ToUserName))
