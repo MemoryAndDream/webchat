@@ -66,7 +66,7 @@ def results_toString(rs):  #限制貌似是不能超过2048字节
             else:strSum+=4
             crawlerReply = crawlerReply + s
         crawlerReply = crawlerReply + '\n\n'
-        return crawlerReply
+    return crawlerReply
 
 
 #带权重随机
