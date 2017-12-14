@@ -21,9 +21,9 @@ def reply(MsgContent,userOpenId='',mod=''):
     #如果有资源就返回资源，如果没有就骂人 ,切换模式，模式需要在用户session中记录 输入别骂了才能切换回来 或者设置资源的前缀，不合法的都骂
     #reply = maRen()
     if mod == 'qgg':
-        reply = crawler(MsgContent, userOpenId=userOpenId,sites=[30])
+        reply = crawler(MsgContent, userOpenId=userOpenId,sites=[30],mod=mod)
     else:
-        reply = crawler(MsgContent,userOpenId=userOpenId,sites=[19])
+        reply = crawler(MsgContent,userOpenId=userOpenId,sites=[19],mod=mod)
     if reply:
         return {'reply':reply,'mode':0}
     else:
@@ -53,15 +53,16 @@ def crawler(keyword,userOpenId='',sites=[19],mod=''):
         rs.append('''<a href='%s'>%s</a> '''%(url,title))
         if title and url:
             save_resource(title+'_'+mod,url,keyword,userOpenId=userOpenId)
-    return results_toString(rs)
+    return results_toString(rs,mod)
 
-def results_toString(rs):  #限制貌似是不能超过2048字节
+def results_toString(rs,mod=''):  #限制貌似是不能超过2048字节
     crawlerReply = ''
     strSum = 0
     rs.reverse()#倒序排列 这操作会改变原来的数组
     for resultStr in rs:
         if strSum > 1970:
-            crawlerReply = crawlerReply + '回复数字集数显示未显示集数'
+            if mod == 'qgg':
+                crawlerReply = crawlerReply + '回复数字集数显示未显示集数'
             break
         for s in resultStr:
             if s.isdigit()|s.isalpha()|s.isspace():strSum+=1
@@ -109,7 +110,7 @@ def search_resource(queryString,userOpenId='',mod=''):
             resource.OpenID = userOpenId
             resource.save()
 
-        output = results_toString(result)
+        output = results_toString(result,mod)
     except Exception,e:
         logger.error(str(e))
     return output
