@@ -107,7 +107,7 @@ def search_resource(queryString,userOpenId='',mod=''):
         for resource in resources:
             result.append('''<a href='%s'>%s</a> '''%(resource.url,resource.title.replace('_' + mod,'')))
             resource.create_time = now
-            resource.OpenID = userOpenId
+            resource.OpenID = userOpenId#这个操作以后可以改成重新create一条
             resource.save()
 
         output = results_toString(result,mod)
