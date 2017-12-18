@@ -84,7 +84,8 @@ def crawler(keyword,userOpenId='',sites=[19],mod=''):
 def results_toString(rs,mod=''):  #限制貌似是不能超过2048字节
     crawlerReply = ''
     strSum = 0
-    rs.reverse()#倒序排列 这操作会改变原来的数组
+    if mod == 'qgg':
+        rs.reverse()#倒序排列 这操作会改变原来的数组
     for resultStr in rs:
         if strSum > 1970:
             if mod == 'qgg':
