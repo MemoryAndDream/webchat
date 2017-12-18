@@ -138,6 +138,8 @@ LOGGING = {
         'default': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
+            'maxBytes': 1024*1024*10,
+            'backupCount': 5,
             'filename': '/var/log/wechat/reply.log',
             'formatter': 'standard',
         },
@@ -145,7 +147,7 @@ LOGGING = {
     'loggers': {
         'default': {
             'handlers': ['default'],
-            'level': 'DEBUG',
+            'level': 'DEBUG',#INFO
             'propagate': False,
         },
     },

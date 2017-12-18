@@ -10,10 +10,26 @@ from ..models import Reply,Resource,Resource_Cache
 from django.db.models import Sum, Count,Avg
 import logging
 import datetime
+import time
+
 from ..crawler.mainprocess import keywordSearch
 
 logger = logging.getLogger('default')
 
+def my_wrapfunc(func):
+    def wrapped_func(*args, **kwargs):
+        start = time.time()
+        while True:
+            try:
+
+                ret = func(*args, **kwargs)
+                logging.debug("%s cost [%s]s, " % (func.__name__, time.time() - start))
+                return ret
+            except Exception, e:
+                logging.error(str(e))
+    return wrapped_func
+
+@my_wrapfunc
 def reply(MsgContent,userOpenId='',mod=''):
     queryResult = search_resource(MsgContent,userOpenId,mod=mod)
     if queryResult:#这个逻辑后面得改，不兼容搜索，要么就是根据公众号类型不同返回
@@ -32,6 +48,7 @@ def reply(MsgContent,userOpenId='',mod=''):
 import random
 
 #骂人回复
+@my_wrapfunc
 def maRen():
     results = Reply.objects.order_by("-weight").all()[:100]
     replys = []
@@ -43,6 +60,7 @@ def maRen():
     return reply
 
 #爬虫回复
+@my_wrapfunc
 def crawler(keyword,userOpenId='',sites=[19],mod=''):
     rsDict = keywordSearch(keyword,sites=sites)
     urlinfos = rsDict['urlinfos']
@@ -55,6 +73,7 @@ def crawler(keyword,userOpenId='',sites=[19],mod=''):
             save_resource(title+'_'+mod,url,keyword,userOpenId=userOpenId)
     return results_toString(rs,mod)
 
+@my_wrapfunc
 def results_toString(rs,mod=''):  #限制貌似是不能超过2048字节
     crawlerReply = ''
     strSum = 0
@@ -73,6 +92,7 @@ def results_toString(rs,mod=''):  #限制貌似是不能超过2048字节
 
 
 #带权重随机
+@my_wrapfunc
 def weight_choice(list):
     """
     #list = [['a',1],['b',1]]
@@ -90,37 +110,33 @@ def weight_choice(list):
         if sumChoice>= choiceInt:
             return value
 
+@my_wrapfunc
 def search_resource(queryString,userOpenId='',mod=''):
-    try:
-        #这里增加一个逻辑 如果用户输入数字，则先去数据库里搜索最近一分钟title包含 数字_的结果 按时间倒序排列
-        now = datetime.datetime.now()
-        import re
-        if re.match('\d+',queryString):
-            start = now - datetime.timedelta(hours=23, minutes=59, seconds=59)
-            resources = Resource_Cache.objects.filter(OpenID__iexact=userOpenId).filter(create_time__gt=start).filter(title__endswith=' '+queryString + '_' + mod).order_by("-create_time")[:10]
+    #这里增加一个逻辑 如果用户输入数字，则先去数据库里搜索最近一分钟title包含 数字_的结果 按时间倒序排列
+    now = datetime.datetime.now()
+    import re
+    if re.match('\d+',queryString):
+        start = now - datetime.timedelta(hours=23, minutes=59, seconds=59)
+        resources = Resource_Cache.objects.filter(OpenID__iexact=userOpenId).filter(create_time__gt=start).filter(title__endswith=' '+queryString + '_' + mod).order_by("-create_time")[:10]
 
-        else:
-            start = now-datetime.timedelta(hours=23, minutes=59, seconds=59)#缓存一小时的数据 读取缓存需要修改用户id  缓存和上面的逻辑有冲突
-            resources = Resource_Cache.objects.filter(create_time__gt=start).filter(keyword__iexact=queryString+'_'+mod)[:10]#后面需要加更多限制 反正也显示不了10条
-        result=[]
+    else:
+        start = now-datetime.timedelta(hours=23, minutes=59, seconds=59)#缓存一小时的数据 读取缓存需要修改用户id  缓存和上面的逻辑有冲突
+        resources = Resource_Cache.objects.filter(create_time__gt=start).filter(keyword__iexact=queryString+'_'+mod)[:10]#后面需要加更多限制 反正也显示不了10条
+    result=[]
 
-        for resource in resources:
-            result.append('''<a href='%s'>%s</a> '''%(resource.url,resource.title.replace('_' + mod,'')))
-            resource.create_time = now
-            resource.OpenID = userOpenId#这个操作以后可以改成重新create一条
-            resource.save()
+    for resource in resources:
+        result.append('''<a href='%s'>%s</a> '''%(resource.url,resource.title.replace('_' + mod,'')))
+        resource.create_time = now
+        resource.OpenID = userOpenId#这个操作以后可以改成重新create一条
+        resource.save()
 
-        output = results_toString(result,mod)
-    except Exception,e:
-        logger.error(str(e))
+    output = results_toString(result,mod)
     return output
 
+@my_wrapfunc
 def save_resource(title,url,keyword,userOpenId='',uploader='system'):
-    try:
-        r = Resource_Cache.objects.get_or_create(keyword=keyword,url=url,OpenID=userOpenId)[0]#一个用户的同一搜索只能存一条
-        r.title=title
-        r.uploader = uploader
-        r.create_time = datetime.datetime.now()
-        r.save()
-    except Exception,e:
-        logger.error(str(e))
+    r = Resource_Cache.objects.get_or_create(keyword=keyword,url=url,OpenID=userOpenId)[0]#一个用户的同一搜索只能存一条
+    r.title=title
+    r.uploader = uploader
+    r.create_time = datetime.datetime.now()
+    r.save()
