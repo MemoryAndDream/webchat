@@ -30,6 +30,8 @@ def my_wrapfunc(func):
 
 @my_wrapfunc
 def reply(MsgContent,userOpenId='',mod=''):
+    start = time.time()
+
     queryResult = search_resource(MsgContent,userOpenId,mod=mod)
     if queryResult:#这个逻辑后面得改，不兼容搜索，要么就是根据公众号类型不同返回
        return {'reply': queryResult, 'mode': 0}
@@ -44,7 +46,9 @@ def reply(MsgContent,userOpenId='',mod=''):
     if reply:
         return {'reply':reply,'mode':0}
     elif mod and mod != 'pan':
-        return {'reply': '没有搜到结果,要不试着在标题前加上"pan "试试搜索云盘内容，如"pan 权力的游戏" ', 'mode': 1}
+        return {'reply': '没有搜到结果,你可以在标题前加上 pan 搜索云盘内容，如"pan 权力的游戏" ', 'mode': 1}
+    elif time.time() - start >4:
+        return {'reply': '处理超时了，重试一次吧亲', 'mode': 1}
     else:
         return {'reply':'没有搜到结果','mode':1}
 
