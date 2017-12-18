@@ -38,8 +38,8 @@ def reply(MsgContent,userOpenId='',mod=''):
     #如果有资源就返回资源，如果没有就骂人 ,切换模式，模式需要在用户session中记录 输入别骂了才能切换回来 或者设置资源的前缀，不合法的都骂
     #reply = maRen()
     if mod == 'qgg':
-        reply = crawler(MsgContent, userOpenId=userOpenId,sites=[30],mod=mod)
-    if mod == 'pan':
+        reply = crawler(MsgContent, userOpenId=userOpenId,sites=[30,31],mod=mod)
+    elif mod == 'pan':
         reply = crawler(MsgContent, userOpenId=userOpenId,sites=[19],mod=mod)
     else:
         reply = crawler(MsgContent,userOpenId=userOpenId,sites=[19],mod=mod)
@@ -89,7 +89,7 @@ def results_toString(rs,mod=''):  #限制貌似是不能超过2048字节
     for resultStr in rs:
         if strSum > 1970:
             if mod == 'qgg':
-                crawlerReply = crawlerReply + '有未显示集数，回复数字集数显示'
+                crawlerReply = crawlerReply + '有未显示集数，回复数字集数显示(如 12)'
             break
         for s in resultStr:
             if s.isdigit()|s.isalpha()|s.isspace():strSum+=1
