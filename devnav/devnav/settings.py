@@ -150,5 +150,10 @@ LOGGING = {
             'level': 'DEBUG',#INFO
             'propagate': False,
         },
+        'root': {#root是所有的父节点
+            'handlers': ['default'],
+            'level': 'DEBUG',  # INFO
+            'propagate': False,
+        },
     },
 }

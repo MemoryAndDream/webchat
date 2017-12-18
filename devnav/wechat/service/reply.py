@@ -21,7 +21,6 @@ def my_wrapfunc(func):
         start = time.time()
         while True:
             try:
-
                 ret = func(*args, **kwargs)
                 logging.debug("%s cost [%s]s, " % (func.__name__, time.time() - start))
                 return ret
@@ -38,10 +37,14 @@ def reply(MsgContent,userOpenId='',mod=''):
     #reply = maRen()
     if mod == 'qgg':
         reply = crawler(MsgContent, userOpenId=userOpenId,sites=[30],mod=mod)
+    if mod == 'pan':
+        reply = crawler(MsgContent, userOpenId=userOpenId,sites=[19],mod=mod)
     else:
         reply = crawler(MsgContent,userOpenId=userOpenId,sites=[19],mod=mod)
     if reply:
         return {'reply':reply,'mode':0}
+    elif mod and mod != 'pan':
+        return {'reply': '没有搜到结果,要不试着在标题前加上"pan "试试搜索云盘内容，如"pan 权力的游戏" ', 'mode': 1}
     else:
         return {'reply':'没有搜到结果','mode':1}
 
@@ -81,7 +84,7 @@ def results_toString(rs,mod=''):  #限制貌似是不能超过2048字节
     for resultStr in rs:
         if strSum > 1970:
             if mod == 'qgg':
-                crawlerReply = crawlerReply + '回复数字集数显示未显示集数'
+                crawlerReply = crawlerReply + '有未显示集数，回复数字集数显示'
             break
         for s in resultStr:
             if s.isdigit()|s.isalpha()|s.isspace():strSum+=1
@@ -117,11 +120,12 @@ def search_resource(queryString,userOpenId='',mod=''):
     import re
     if re.match('\d+',queryString):
         start = now - datetime.timedelta(hours=23, minutes=59, seconds=59)
-        resources = Resource_Cache.objects.filter(OpenID__iexact=userOpenId).filter(create_time__gt=start).filter(title__endswith=' '+queryString + '_' + mod).order_by("-create_time")[:10]
+        resources = Resource_Cache.objects.filter(create_time__gt=start).filter(OpenID__iexact=userOpenId).filter(title__endswith=' '+queryString + '_' + mod).order_by("-create_time")[:10]
 
     else:
-        start = now-datetime.timedelta(hours=23, minutes=59, seconds=59)#缓存一小时的数据 读取缓存需要修改用户id  缓存和上面的逻辑有冲突
+        start = now-datetime.timedelta(hours=23, minutes=59, seconds=59)#缓存一天的数据 读取缓存需要修改用户id  缓存和上面的逻辑有冲突
         resources = Resource_Cache.objects.filter(create_time__gt=start).filter(keyword__iexact=queryString+'_'+mod)[:10]#后面需要加更多限制 反正也显示不了10条
+
     result=[]
 
     for resource in resources:

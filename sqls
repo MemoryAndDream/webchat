@@ -1,0 +1,21 @@
+| wechat_resource_cache | CREATE TABLE `wechat_resource_cache` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `keyword` varchar(100) NOT NULL,
+  `title` varchar(100) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `post_date` varchar(255) NOT NULL,
+  `request_count` int(11) NOT NULL,
+  `download_url` varchar(255) NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `verify_time` datetime DEFAULT NULL,
+  `user` varchar(100) NOT NULL,
+  `uploader` varchar(100) NOT NULL,
+  `type` varchar(100) NOT NULL,
+  `OpenID` varchar(100) NOT NULL,
+  `UnionID` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `OpenID` (`OpenID`),
+  KEY `keyword` (`keyword`),
+  KEY `index_name` (`create_time`)
+) ENGINE=InnoDB AUTO_INCREMENT=16570 DEFAULT CHARSET=utf8 |

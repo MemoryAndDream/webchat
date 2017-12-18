@@ -68,7 +68,11 @@ def autoreply(request):
                     replyContent = learn(learnContent[0],learnContent[1])
                 else:replyContent = learn(learnContent[0])
             if fromUser == 'gh_af4058d792a2':#abc快看
-                replyContent = reply(MsgContent=MsgContent, userOpenId=toUser, mod='qgg')['reply']
+                if MsgContent.startswith('pan '):
+                    keyword = MsgContent[4:]
+                    replyContent = reply(MsgContent=keyword, userOpenId=toUser, mod='pan')['reply']
+                else:
+                    replyContent = reply(MsgContent=MsgContent, userOpenId=toUser, mod='qgg')['reply']
             else:
                 import re
                 if  re.match('\d+',MsgContent):
