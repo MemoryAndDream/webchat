@@ -22,10 +22,10 @@ def my_wrapfunc(func):
         while True:
             try:
                 ret = func(*args, **kwargs)
-                logging.debug("%s cost [%s]s, " % (func.__name__, time.time() - start))
+                logger.debug("%s cost [%s]s, " % (func.__name__, time.time() - start))
                 return ret
             except Exception, e:
-                logging.error(str(e))
+                logger.error(str(e))
     return wrapped_func
 
 @my_wrapfunc
@@ -123,7 +123,8 @@ def search_resource(queryString,userOpenId='',mod=''):
     #这里增加一个逻辑 如果用户输入数字，则先去数据库里搜索最近一分钟title包含 数字_的结果 按时间倒序排列
     now = datetime.datetime.now()
     import re
-    if re.match('\d+',queryString):
+    if re.match('\s*\d+\s*',queryString):
+        queryString = queryString.replace(' ','')
         start = now - datetime.timedelta(hours=23, minutes=59, seconds=59)
         resources = Resource_Cache.objects.filter(create_time__gt=start).filter(OpenID__iexact=userOpenId).filter(title__endswith=' '+queryString + '_' + mod).order_by("-create_time")[:10]
 

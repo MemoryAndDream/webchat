@@ -60,32 +60,21 @@ def autoreply(request):
         #print MsgContent
         if msg_type == 'text':
             #print MsgContent
-            logger.info('in:'+str(MsgContent))
+            logger.info('in:'+str(toUser)+' '+str(MsgContent))
 
             if MsgContent.startswith('s='):
                 learnContent = MsgContent[2:].split('w=')
                 if len(learnContent)>1:
                     replyContent = learn(learnContent[0],learnContent[1])
                 else:replyContent = learn(learnContent[0])
-            if fromUser == 'gh_af4058d792a2':#abc快看
-                if MsgContent.startswith('pan '):
-                    keyword = MsgContent[4:]
-                    replyContent = reply(MsgContent=keyword, userOpenId=toUser, mod='pan')['reply']
-                else:
-                    replyContent = reply(MsgContent=MsgContent, userOpenId=toUser, mod='qgg')['reply']
+            if MsgContent.startswith('pan'):
+                if MsgContent.startswith('pan '):keyword = MsgContent[4:]
+                else: keyword = MsgContent[3:]
+                replyContent = reply(MsgContent=keyword, userOpenId=toUser, mod='pan')['reply']
             else:
-                import re
-                if  re.match('\d+',MsgContent):
-                    replyContent = reply(MsgContent=MsgContent, userOpenId=toUser, mod='qgg')['reply']
-                elif MsgContent.startswith('qgg '):
-                    keyword = MsgContent[4:]
-                    replyContent = reply(MsgContent=keyword, userOpenId=toUser,mod='qgg')['reply']
-                elif MsgContent :
-                    replyContent = reply(MsgContent=MsgContent,userOpenId=toUser)['reply']#传入用户的openid？
-                    #print 'shucu'
-                else:
-                    replyContent = "这公众号傻逼了"
-            logger.info('out:' + str(replyContent))
+                replyContent = reply(MsgContent=MsgContent, userOpenId=toUser, mod='qgg')['reply']
+
+            logger.info('out:' +str(toUser)+' '+ str(replyContent))
             replyMsg = TextMsg(toUser, fromUser, replyContent)
             #print "成功了!!!!!!!!!!!!!!!!!!!"
             #print replyMsg

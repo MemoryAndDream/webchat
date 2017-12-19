@@ -75,12 +75,17 @@ WSGI_APPLICATION = 'devnav.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
+import socket
+hostname = socket.gethostname()
+
+if  'debian' in hostname:PASSWORD='meng631011'
+else:PASSWORD='password'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'mydb',
         'USER':'root',
-        'PASSWORD':'meng631011',
+        'PASSWORD':PASSWORD,
         'HOST':'localhost',
         'PORT':'3306',
     }
