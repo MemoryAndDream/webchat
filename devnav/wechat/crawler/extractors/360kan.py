@@ -20,7 +20,9 @@ def process(keyword,page):
     #print url
     urlinfos=[]
     page = ct.crawlerTool.getPage(url)
-    detailsPage = ct.crawlerTool.getXpath('//div[@class="b-mainpic"]/a/@href', page)[0]
+    detailsPage = ct.crawlerTool.getXpath('//div[@class="b-mainpic"]/a/@href', page)
+    if detailsPage:detailsPage=detailsPage[0]
+    else:return {"urlinfos": []}
     detailsPageData = ct.crawlerTool.getPage(detailsPage)
     #tv
     aLevelTitle = ct.crawlerTool.getXpath('//div[@class="title-left g-clear"]/h1/text()',detailsPageData)[0]

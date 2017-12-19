@@ -11,8 +11,8 @@ from django.db.models import Sum, Count,Avg
 import logging
 import datetime
 import time
-from celery import task
-from ..tasks import save_resource_task
+#from celery import task
+#from ..tasks import save_resource_task
 from ..crawler.mainprocess import keywordSearch
 
 logger = logging.getLogger('default')
@@ -32,7 +32,7 @@ def my_wrapfunc(func):
 @my_wrapfunc
 def reply(MsgContent,userOpenId='',mod=''):
     start = time.time()
-
+    logger.debug('input:%s userId:%s mod:%s'%(MsgContent,str(userOpenId),mod))
     queryResult = search_resource(MsgContent,userOpenId,mod=mod)
     if queryResult:#这个逻辑后面得改，不兼容搜索，要么就是根据公众号类型不同返回
        return {'reply': queryResult, 'mode': 0}
@@ -80,7 +80,7 @@ def crawler(keyword,userOpenId='',sites=[19],mod=''):
         rs.append('''<a href='%s'>%s</a> '''%(url,title))
         if title and url:
             #save_resource_task.delay(title+'_'+mod,url,keyword,userOpenId=userOpenId)  #异步发现不靠谱
-            save_resource_task(title + '_' + mod, url, keyword, userOpenId=userOpenId)
+            save_resource(title + '_' + mod, url, keyword, userOpenId=userOpenId)
     return results_toString(rs,mod)
 
 @my_wrapfunc
@@ -149,3 +149,11 @@ def search_resource(queryString,userOpenId='',mod=''):
 
 
 
+@my_wrapfunc
+def save_resource(title,url,keyword,userOpenId='',uploader='system'):
+    logger.debug('save a record %s %s %s')%(url,keyword,userOpenId)
+    r = Resource_Cache.objects.get_or_create(keyword=keyword,url=url,OpenID=userOpenId)[0]#一个用户的同一搜索只能存一条
+    r.title=title
+    r.uploader = uploader
+    r.create_time = datetime.datetime.now()
+    r.save()

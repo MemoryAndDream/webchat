@@ -18,7 +18,7 @@ logger = get_task_logger(__name__)
 #@task(name="wechat.save_resource_task")#唯一的name，不给会自动生成
 def save_resource_task(title,url,keyword,userOpenId='',uploader='system'):
     """sends an email when feedback form is filled successfully"""
-    logger.info("Sent feedback email")
+    logger.info("Sent celerytask")
     return save_resource(title,url,keyword,userOpenId='',uploader='system')
 
 
