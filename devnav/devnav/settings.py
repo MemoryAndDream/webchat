@@ -29,7 +29,7 @@ DEFAULT_CHARSET = "UTF-8"
 ALLOWED_HOSTS = ['*']
 
 import djcelery
-import djkombu
+
 djcelery.setup_loader()
 BROKER_URL = 'django://'
 
@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'wechat',
     'djcelery',
-    'djkombu'
+    'kombu.transport.django'
 ]
 
 MIDDLEWARE = [
