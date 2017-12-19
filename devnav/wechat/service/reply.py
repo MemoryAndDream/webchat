@@ -151,7 +151,7 @@ def search_resource(queryString,userOpenId='',mod=''):
 
 @my_wrapfunc
 def save_resource(title,url,keyword,userOpenId='',uploader='system'):
-    logger.debug('save a record %s %s %s')%(url,keyword,userOpenId)
+    logger.debug('save a record %s %s %s'%(url,keyword,userOpenId))
     r = Resource_Cache.objects.get_or_create(keyword=keyword,url=url,OpenID=userOpenId)[0]#一个用户的同一搜索只能存一条
     r.title=title
     r.uploader = uploader
