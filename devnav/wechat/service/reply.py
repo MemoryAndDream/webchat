@@ -79,7 +79,8 @@ def crawler(keyword,userOpenId='',sites=[19],mod=''):
         url = urlinfo.get('url','')
         rs.append('''<a href='%s'>%s</a> '''%(url,title))
         if title and url:
-            save_resource_task.delay(title+'_'+mod,url,keyword,userOpenId=userOpenId)
+            #save_resource_task.delay(title+'_'+mod,url,keyword,userOpenId=userOpenId)  #异步发现不靠谱
+            save_resource_task.delay(title + '_' + mod, url, keyword, userOpenId=userOpenId)
     return results_toString(rs,mod)
 
 @my_wrapfunc
