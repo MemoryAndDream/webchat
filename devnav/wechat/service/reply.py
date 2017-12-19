@@ -20,13 +20,12 @@ logger = logging.getLogger('default')
 def my_wrapfunc(func):
     def wrapped_func(*args, **kwargs):
         start = time.time()
-        while True:
-            try:
-                ret = func(*args, **kwargs)
-                logger.debug("%s cost [%s]s, " % (func.__name__, time.time() - start))
-                return ret
-            except Exception, e:
-                logger.error(str(e))
+        try:
+            ret = func(*args, **kwargs)
+            logger.debug("%s cost [%s]s, " % (func.__name__, time.time() - start))
+            return ret
+        except Exception, e:
+            logger.error(str(e))
     return wrapped_func
 
 @my_wrapfunc
