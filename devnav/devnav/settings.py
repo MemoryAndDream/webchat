@@ -28,6 +28,10 @@ DEBUG = True
 DEFAULT_CHARSET = "UTF-8"
 ALLOWED_HOSTS = ['*']
 
+import djcelery
+
+djcelery.setup_loader()
+BROKER_URL = 'django://'
 
 # Application definition
 
@@ -39,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
  'wechat',
+'djcelery',
 ]
 
 MIDDLEWARE = [

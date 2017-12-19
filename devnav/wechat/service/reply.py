@@ -11,6 +11,7 @@ from django.db.models import Sum, Count,Avg
 import logging
 import datetime
 import time
+from celery import task
 
 from ..crawler.mainprocess import keywordSearch
 
@@ -77,7 +78,7 @@ def crawler(keyword,userOpenId='',sites=[19],mod=''):
         url = urlinfo.get('url','')
         rs.append('''<a href='%s'>%s</a> '''%(url,title))
         if title and url:
-            save_resource(title+'_'+mod,url,keyword,userOpenId=userOpenId)
+            save_resource.delay(title+'_'+mod,url,keyword,userOpenId=userOpenId)
     return results_toString(rs,mod)
 
 @my_wrapfunc
@@ -143,6 +144,7 @@ def search_resource(queryString,userOpenId='',mod=''):
     output = results_toString(result,mod)
     return output
 
+@task
 @my_wrapfunc
 def save_resource(title,url,keyword,userOpenId='',uploader='system'):
     r = Resource_Cache.objects.get_or_create(keyword=keyword,url=url,OpenID=userOpenId)[0]#一个用户的同一搜索只能存一条
