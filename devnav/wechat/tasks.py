@@ -14,14 +14,15 @@ import datetime
 from .models import Resource_Cache
 
 logger = get_task_logger(__name__)
-@task(name="save_resource_task")
+
+@task(name="wechat.save_resource_task")#唯一的name，不给会自动生成
 def save_resource_task(title,url,keyword,userOpenId='',uploader='system'):
     """sends an email when feedback form is filled successfully"""
     logger.info("Sent feedback email")
     return save_resource(title,url,keyword,userOpenId='',uploader='system')
 
 
-def my_wrapfunc(func):
+def wrapfunc(func):
     def wrapped_func(*args, **kwargs):
         start = time.time()
         while True:
@@ -33,7 +34,7 @@ def my_wrapfunc(func):
                 logger.error(str(e))
     return wrapped_func
 
-@my_wrapfunc
+@wrapfunc
 def save_resource(title,url,keyword,userOpenId='',uploader='system'):
 
     r = Resource_Cache.objects.get_or_create(keyword=keyword,url=url,OpenID=userOpenId)[0]#一个用户的同一搜索只能存一条
