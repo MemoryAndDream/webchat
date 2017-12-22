@@ -14,6 +14,7 @@ import time
 #from celery import task
 #from ..tasks import save_resource_task
 from ..crawler.mainprocess import keywordSearch
+import re
 
 logger = logging.getLogger('default')
 
@@ -45,6 +46,8 @@ def reply(MsgContent,userOpenId='',mod=''):
         reply = crawler(MsgContent,userOpenId=userOpenId,sites=[19],mod=mod)
     if reply:
         return {'reply':reply,'mode':0}
+    elif re.match('\s*\d+\s*',MsgContent):
+        return {'reply': '没有搜到对应集数,可能是搜索过期啦，请重新搜索" ', 'mode': 1}
     elif mod and mod != 'pan':
         return {'reply': '没有搜到结果,你可以在标题前加上 pan 搜索云盘内容，如"pan 权力的游戏" ', 'mode': 1}
     elif time.time() - start >4:
@@ -124,7 +127,7 @@ def weight_choice(list):
 def search_resource(queryString,userOpenId='',mod=''):
     #这里增加一个逻辑 如果用户输入数字，则先去数据库里搜索最近一分钟title包含 数字_的结果 按时间倒序排列
     now = datetime.datetime.now()
-    import re
+
     if re.match('\s*\d+\s*',queryString):
         queryString = queryString.replace(' ','')
         start = now - datetime.timedelta(hours=23, minutes=59, seconds=59)
@@ -140,8 +143,9 @@ def search_resource(queryString,userOpenId='',mod=''):
         result.append('''<a href='%s'>%s</a> '''%(resource.url,resource.title.replace('_' + mod,'')))
         if resource.uploader != 'manual':#如果人工插入不更新
             resource.create_time = now
-        resource.OpenID = userOpenId#这个操作以后可以改成重新create一条
+        resource.OpenID = userOpenId#这个是有问题的
         resource.save()
+
 
     output = results_toString(result,mod)
     return output
