@@ -41,9 +41,12 @@ class Resource(models.Model):
             return self.url+self.title
 
 class User(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, blank=True)
     OpenID = models.CharField(max_length=100, blank=True)
     UnionID = models.CharField(max_length=100, blank=True)
+    last_input = models.CharField(max_length=100, blank=True)
+    last_page = models.IntegerField(default=1, blank=True)
+    last_request_time = models.DateTimeField(auto_now=True,blank=True)
 
 class Resource_Cache(models.Model):
     keyword = models.CharField(max_length=100)
