@@ -91,11 +91,12 @@ def results_toString(rs,mod=''):  #限制貌似是不能超过2048字节
     crawlerReply = ''
     strSum = 0
     if mod == 'qgg':
-        rs.reverse()#倒序排列 这操作会改变原来的数组
+        #rs.reverse()#倒序排列 这操作会改变原来的数组
+        pass
     for resultStr in rs:
         if strSum > 1970:
             if mod == 'qgg':
-                crawlerReply = crawlerReply + '有未显示集数，回复数字集数显示(如 12)'
+                crawlerReply = crawlerReply + '有未显示集数，回复数字集数(如 12)从第n集开始显示'
             break
         for s in resultStr:
             if s.isdigit()|s.isalpha()|s.isspace():strSum+=1
@@ -146,9 +147,9 @@ def search_resource(queryString,userOpenId='',mod=''):
 
                 if rs_page:
                     rs_page=int(rs_page)
-                    if rs_page >page:
+                    if rs_page >= page:
                         resources.append(r)
-            resources.reverse()
+           # resources.reverse()
 
         else:
             resources = Resource_Cache.objects.filter(create_time__gt=start).filter(OpenID__iexact=userOpenId).filter(title__endswith=' '+queryString + '_' + mod).order_by("-create_time")[:10]
