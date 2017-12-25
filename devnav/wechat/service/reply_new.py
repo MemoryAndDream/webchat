@@ -137,7 +137,7 @@ def search_resource(queryString,userOpenId='',mod=''):
         user = User.objects.filter(OpenID__iexact=userOpenId)[0]
         if user: #利用user表保存keyword，防止异步 这里需要加个翻页的逻辑 后面用这种mod的模式不好
             keyword = user.keyword
-            search_resource = Resource_Cache.objects.filter(create_time__gt=start).filter(keyword__iexact=keyword).order_by("-create_time")
+            search_resource = Resource_Cache.objects.filter(create_time__gt=start).filter(keyword__iexact=keyword)
             logger.debug(keyword,search_resource)
             #.filter(title__endswith=' '+queryString + '_' + mod) 先拉出完整搜索结果存入数组
             rs_dict = {}
