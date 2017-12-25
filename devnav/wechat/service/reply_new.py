@@ -47,7 +47,7 @@ def reply(MsgContent,userOpenId='',mod=''):
     if reply:
         return {'reply':reply,'mode':0}
     elif re.match('\s*\d+\s*',MsgContent):
-        return {'reply': '没有搜到对应集数,可能是搜索过期啦，请重新搜索" ', 'mode': 1}
+        return {'reply': '没有搜到对应集数 ', 'mode': 1}
     elif mod and mod != 'pan':
         return {'reply': '没有搜到结果,你可以在标题前加上 pan 搜索云盘内容，如"pan 权力的游戏" ', 'mode': 1}
     elif time.time() - start >5:#这个不太灵，因为搜索可能就会超过6秒
@@ -136,6 +136,7 @@ def search_resource(queryString,userOpenId='',mod=''):
         if user: #利用user表保存keyword，防止异步 这里需要加个翻页的逻辑，这样一次只能显示一条，不太好
             keyword = user.keyword
             search_resource = Resource_Cache.objects.filter(create_time__gt=start).filter(keyword__iexact=keyword+'_'+mod).order_by("-create_time")
+            logger.debug(search_resource)
             #.filter(title__endswith=' '+queryString + '_' + mod) 先拉出完整搜索结果存入数组
             rs_dict = {}
             resources=[]
@@ -170,17 +171,19 @@ def search_resource(queryString,userOpenId='',mod=''):
 
 
 @my_wrapfunc
-def save_resource(title,url,keyword,userOpenId='',uploader='system'):
-    logger.debug('save a record %s %s %s'%(url,keyword,userOpenId))
-    r = Resource_Cache.objects.get_or_create(keyword=keyword,url=url,OpenID=userOpenId)[0]#一个用户的同一搜索只能存一条
+def save_resource(title,url,input,userOpenId='',uploader='system'):
+    logger.debug('save a record %s %s %s'%(url,input,userOpenId))
+    r = Resource_Cache.objects.get_or_create(keyword=input,url=url,OpenID=userOpenId)[0]#一个用户的同一搜索只能存一条
     r.title=title
     r.uploader = uploader
     r.create_time = datetime.datetime.now()
     r.save()
 
     u=User.objects.get_or_create(OpenID=userOpenId)[0]
-    u.last_input = keyword
-    u.keyword = keyword
+
+    u.last_input = input
+    if not re.match('\s*\d+\s*',input):
+        u.keyword = input
     u.last_page = 1
     u.last_request_time = datetime.datetime.now()
     u.save()
