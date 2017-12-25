@@ -148,7 +148,7 @@ def search_resource(queryString,userOpenId='',mod=''):
                     rs_page=int(rs_page)
                     if rs_page >page:
                         resources.append(r)
-
+            resources.reverse()
 
         else:
             resources = Resource_Cache.objects.filter(create_time__gt=start).filter(OpenID__iexact=userOpenId).filter(title__endswith=' '+queryString + '_' + mod).order_by("-create_time")[:10]
