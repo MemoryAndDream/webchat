@@ -178,7 +178,7 @@ def save_resource(title,url,keyword,userOpenId='',uploader='system'):
     r.create_time = datetime.datetime.now()
     r.save()
 
-    u=User.objects.get_or_create(OpenID=userOpenId)
+    u=User.objects.get_or_create(OpenID=userOpenId)[0]
     u.last_input = keyword
     u.last_page = 1
     u.last_request_time = datetime.datetime.now()
