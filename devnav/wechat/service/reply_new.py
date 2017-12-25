@@ -14,6 +14,7 @@ import time
 #from celery import task
 #from ..tasks import save_resource_task
 from ..crawler.mainprocess import keywordSearch
+from ..crawler.common.crawlerTool import crawlerTool as ct
 import re
 
 logger = logging.getLogger('default')
@@ -135,17 +136,18 @@ def search_resource(queryString,userOpenId='',mod=''):
         user = User.objects.filter(OpenID__iexact=userOpenId)[0]
         if user: #利用user表保存keyword，防止异步 这里需要加个翻页的逻辑 后面用这种mod的模式不好
             keyword = user.keyword
-            search_resource = Resource_Cache.objects.filter(create_time__gt=start).filter(keyword__iexact=keyword+ '_' + mod).order_by("-create_time")
-            logger.debug(search_resource)
+            search_resource = Resource_Cache.objects.filter(create_time__gt=start).filter(keyword__iexact=keyword).order_by("-create_time")
+            logger.debug(keyword,search_resource)
             #.filter(title__endswith=' '+queryString + '_' + mod) 先拉出完整搜索结果存入数组
             rs_dict = {}
             resources=[]
             for r in search_resource:
-                rs_page = re.search(" ()_%s"%mod ,r.title)
+                rs_page = ct.getRegex(" (\d+)_%s"%mod ,r.title)
+
                 if rs_page:
                     rs_page=int(rs_page)
                     if rs_page >page:
-                        search_resource.append(r)
+                        resources.append(r)
 
 
         else:
