@@ -132,7 +132,7 @@ def search_resource(queryString,userOpenId='',mod=''):
         page = int(queryString)
         queryString = queryString.replace(' ','')
         start = now - datetime.timedelta(hours=23, minutes=59, seconds=59)
-        user = User.objects.filter(userOpenId__iexact=userOpenId)[0]
+        user = User.objects.filter(OpenID__iexact=userOpenId)[0]
         if user: #利用user表保存keyword，防止异步 这里需要加个翻页的逻辑，这样一次只能显示一条，不太好
             keyword = user.keyword
             search_resource = Resource_Cache.objects.filter(create_time__gt=start).filter(keyword__iexact=keyword+'_'+mod).order_by("-create_time")
@@ -178,7 +178,7 @@ def save_resource(title,url,keyword,userOpenId='',uploader='system'):
     r.create_time = datetime.datetime.now()
     r.save()
 
-    u=User.objects.get_or_create(userOpenId=userOpenId)
+    u=User.objects.get_or_create(OpenID=userOpenId)
     u.last_input = keyword
     u.last_page = 1
     u.last_request_time = datetime.datetime.now()
