@@ -50,7 +50,7 @@ def reply(MsgContent,userOpenId='',mod=''):
         return {'reply': '没有搜到对应集数,可能是搜索过期啦，请重新搜索" ', 'mode': 1}
     elif mod and mod != 'pan':
         return {'reply': '没有搜到结果,你可以在标题前加上 pan 搜索云盘内容，如"pan 权力的游戏" ', 'mode': 1}
-    elif time.time() - start >4:
+    elif time.time() - start >5:#这个不太灵，因为搜索可能就会超过6秒
         return {'reply': '处理超时了，重试一次吧亲', 'mode': 1}
     else:
         return {'reply':'没有搜到结果','mode':1}
@@ -180,6 +180,7 @@ def save_resource(title,url,keyword,userOpenId='',uploader='system'):
 
     u=User.objects.get_or_create(OpenID=userOpenId)[0]
     u.last_input = keyword
+    u.keyword = keyword
     u.last_page = 1
     u.last_request_time = datetime.datetime.now()
     u.save()

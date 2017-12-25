@@ -45,6 +45,7 @@ class User(models.Model):
     OpenID = models.CharField(max_length=100, blank=True)
     UnionID = models.CharField(max_length=100, blank=True)
     last_input = models.CharField(max_length=100, blank=True)
+    keyword = models.CharField(max_length=100, blank=True)
     last_page = models.IntegerField(default=1, blank=True)
     last_request_time = models.DateTimeField(auto_now=True,blank=True)
 
