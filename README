@@ -21,6 +21,20 @@
   KEY `index_name` (`create_time`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16570 DEFAULT CHARSET=utf8 |
 
+wechat_user
+CREATE TABLE `wechat_user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) DEFAULT NULL,
+  `OpenID` varchar(100) NOT NULL,
+  `UnionID` varchar(100) DEFAULT NULL,
+  `last_input` varchar(255) DEFAULT NULL,
+  `last_page` int(11) DEFAULT NULL,
+  `last_request_time` datetime DEFAULT NULL,
+  `keyword` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `openid` (`OpenID`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8
+
 
 
 #uploader == manual 则为人工插入
