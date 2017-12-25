@@ -38,11 +38,11 @@ def process(keyword, page):
                 urlinfo = {}
                 localurl = ct.getRegex('(http.*?)\?', ct.getXpath('//a/@href', segment)[0])
                 if localurl:
-                    if 'youku' in localurl:
+                    if 'youku' in localurl and 'url=' in localurl:
                         localurl = ct.getRegex('url=(.*?html)&', localurl)
                     else:
                         localurl = localurl
-                    urlinfo['url'] = "http://jqaaa.com/jx.php?url=" + localurl
+                    urlinfo['url'] = "http://api.baiyug.cn/vip/index.php?url=" + localurl
                     title = HTMLParser().unescape(ct.getXpath('//a/text()', segment)[0]).replace('\r\n', '')
                     urlinfo['title'] = aLevelTitle + ' ' + title.strip()
                     urlinfos.append(urlinfo)
@@ -61,11 +61,11 @@ def process(keyword, page):
                 urlinfo = {}
                 localurl = ct.getRegex('(http.*?)\?', ct.getXpath('//li/a/@href', segment)[0])
                 if localurl:
-                    if 'youku' in localurl:
+                    if 'youku' in localurl and 'url=' in localurl:
                         localurl = ct.getRegex('url=(.*?html)&', localurl)
                     else:
                         localurl = localurl
-                    urlinfo['url'] = "http://jqaaa.com/jx.php?url=" + localurl
+                    urlinfo['url'] = "http://api.baiyug.cn/vip/index.php?url=" + localurl
                     title = HTMLParser().unescape(ct.getRegex('title="(.*?)"', segment))
                     titleId = ct.getRegex(u'第(.*?)期', title)
                     urlinfo['title'] = title.strip() + ' ' + titleId
@@ -88,14 +88,14 @@ def process(keyword, page):
                 urlinfo = {}
                 localurl = ct.getXpath('//a/@href', segment)[0]
                 if localurl:
-                    if 'youku' in localurl:
+                    if 'youku' in localurl and 'url=' in localurl:
                         localurl = ct.getRegex('url=(.*?html)&', localurl)
                     elif 'mgtv' in localurl:
                         localurl = ct.getPage('(http.*?)\?', localurl)
                     else:
                         localurl = localurl
 
-                    urlinfo['url'] = "http://jqaaa.com/jx.php?url=" + localurl
+                    urlinfo['url'] = "http://api.baiyug.cn/vip/index.php?url=" + localurl
                     urlinfo['title'] = HTMLParser().unescape(title_movie)
                     urlinfos.append(urlinfo)
                 else:

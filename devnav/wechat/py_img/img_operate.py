@@ -162,9 +162,9 @@ class Img_opt:  #参考https://www.cnblogs.com/apexchu/p/4231041.html
     #增加文字水印
     @classmethod
     # image: 图片  text：要添加的文本 font：字体
-    def add_text_to_image(image, text):
+    def add_text_to_image(self,image, text):
         # 指定要使用的字体和大小；/Library/Fonts/是macOS字体目录；Linux的字体目录是/usr/share/fonts/
-        font = ImageFont.truetype('/Library/Fonts/Arial.ttf', 24)
+        font = ImageFont.truetype('C:\Windows\Fonts\Arial.ttf', 24)
         rgba_image = image.convert('RGBA')
         text_overlay = Image.new('RGBA', rgba_image.size, (255, 255, 255, 0))
         image_draw = ImageDraw.Draw(text_overlay)
@@ -174,7 +174,7 @@ class Img_opt:  #参考https://www.cnblogs.com/apexchu/p/4231041.html
         print(rgba_image)
         text_xy = (rgba_image.size[0] - text_size_x, rgba_image.size[1] - text_size_y)
         # 设置文本颜色和透明度
-        image_draw.text(text_xy, text, font=font, fill=(76, 234, 124, 180))
+        image_draw.text(text_xy, text, font=font, fill='black')
 
         image_with_text = Image.alpha_composite(rgba_image, text_overlay)
 
@@ -189,8 +189,13 @@ class Img_opt:  #参考https://www.cnblogs.com/apexchu/p/4231041.html
 
 infile=r'D:\pic\test1.jpg'
 
-Img_opt.get_img_property(infile)
+#Img_opt.get_img_property(infile)
 #outfile = Img_opt.get_thumbnail(infile)
 #Img_opt.show(infile)
 #Img_opt.roll(infile,30).show()
-Img_opt.corp(infile).show()
+#Img_opt.corp(infile).show()
+im_before = Image.open(infile)
+#im_before.show()
+im_after = Img_opt.add_text_to_image(im_before, 'mengzaizai')
+im_after.show()
+# im.save('im_after.jpg')

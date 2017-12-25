@@ -69,7 +69,7 @@ class crawlerTool:
                     method.add_header('User-Agent',
                                   'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:41.0) Gecko/20100101 Firefox/41.0')
                 method.add_header('Accept-Language', 'en-US,en;q=0.5')
-                result = opener.open(method, timeout=4)
+                result = opener.open(method, timeout=10)
                 page_buf = result.read()
                 page_buf=page_buf.decode(pageCharset,'ignore')
                # print page_buf
