@@ -8,7 +8,8 @@ from django.http import HttpResponse
 import sys
 reload(sys)
 sys.setdefaultencoding('utf8')   
-from service.reply import reply
+#from service.reply import reply
+from service.reply_new import reply
 from service.learn import learn
 import logging
 logger = logging.getLogger('default')

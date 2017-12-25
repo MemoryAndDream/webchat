@@ -143,7 +143,7 @@ def search_resource(queryString,userOpenId='',mod=''):
         result.append('''<a href='%s'>%s</a> '''%(resource.url,resource.title.replace('_' + mod,'')))
         if resource.uploader != 'manual':#如果人工插入不更新
             resource.create_time = now
-        resource.OpenID = userOpenId#这个是有问题的
+        resource.OpenID = userOpenId#这个是有问题的，当一个搜索完会导致另一个人按数字失效。所以最好还是存个上下文
         resource.save()
 
 
