@@ -33,7 +33,7 @@ def my_wrapfunc(func):
 @my_wrapfunc
 def reply(MsgContent,userOpenId='',mod=''):
     start = time.time()
-    save_input(userOpenId,MsgContent)
+    save_input(userOpenId,MsgContent,mod=mod)
     logger.debug('input:%s userId:%s mod:%s'%(MsgContent,str(userOpenId),mod))
     queryResult = search_resource(MsgContent,userOpenId,mod=mod)
     if queryResult:#这个逻辑后面得改，不兼容搜索，要么就是根据公众号类型不同返回
@@ -186,12 +186,12 @@ def save_resource(title,url,input,userOpenId='',uploader='system'):
 
 
 @my_wrapfunc
-def save_input(userOpenId,input):
+def save_input(userOpenId,input,mod=''):
     u=User.objects.get_or_create(OpenID=userOpenId)[0]
 
     u.last_input = input
     if not re.match('\s*\d+\s*',input):
-        u.keyword = input
+        u.keyword = input+'_'+mod
     u.last_page = 1
     u.last_request_time = datetime.datetime.now()
     u.save()
