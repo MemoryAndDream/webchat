@@ -49,8 +49,8 @@ def reply(MsgContent,userOpenId='',mod=''):
         return {'reply':reply,'mode':0}
     elif re.match('\s*\d+\s*',MsgContent):
         return {'reply': '没有搜到对应集数 ', 'mode': 1}
-    elif mod and mod != 'pan':
-        return {'reply': '没有搜到结果,你可以在标题前加上 pan 搜索云盘内容，如"pan 权力的游戏" ', 'mode': 1}
+   # elif mod and mod != 'pan':
+    #    return {'reply': '没有搜到结果,你可以在标题前加上 pan 搜索云盘内容，如"pan 权力的游戏" ', 'mode': 1}
     elif time.time() - start >5:#这个不太灵，因为搜索可能就会超过6秒
         return {'reply': '处理超时了，重试一次吧亲', 'mode': 1}
     else:
@@ -96,7 +96,7 @@ def results_toString(rs,mod=''):  #限制貌似是不能超过2048字节
     for resultStr in rs:
         if strSum > 1970:
             if mod == 'qgg':
-                crawlerReply = crawlerReply + '有未显示集数，回复数字集数(如 12)从第n集开始显示'
+                crawlerReply = crawlerReply + '有未显示集数，回复数字集数(如 1)从第n集开始显示'
             break
         for s in resultStr:
             if s.isdigit()|s.isalpha()|s.isspace():strSum+=1
