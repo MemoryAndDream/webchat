@@ -27,12 +27,13 @@ def my_wrapfunc(func):
             logger.debug("%s cost [%s]s, " % (func.__name__, time.time() - start))
             return ret
         except Exception, e:
-            logger.error(str(e))
+            logger.error('func [%s] error [%s]'%(func.__name__,str(e)))
     return wrapped_func
 
 @my_wrapfunc
 def reply(MsgContent,userOpenId='',mod=''):
     start = time.time()
+    save_input(userOpenId,MsgContent)
     logger.debug('input:%s userId:%s mod:%s'%(MsgContent,str(userOpenId),mod))
     queryResult = search_resource(MsgContent,userOpenId,mod=mod)
     if queryResult:#这个逻辑后面得改，不兼容搜索，要么就是根据公众号类型不同返回
@@ -134,8 +135,9 @@ def search_resource(queryString,userOpenId='',mod=''):
         page = int(queryString)
         queryString = queryString.replace(' ','')
         start = now - datetime.timedelta(hours=23, minutes=59, seconds=59)
-        user = User.objects.filter(OpenID__iexact=userOpenId)[0]
+        user = User.objects.filter(OpenID__iexact=userOpenId)
         if user: #利用user表保存keyword，防止异步 这里需要加个翻页的逻辑 后面用这种mod的模式不好
+            user = user[0]
             keyword = user.keyword
             search_resource = Resource_Cache.objects.filter(create_time__gt=start).filter(keyword__iexact=keyword)
             logger.debug(keyword,search_resource)
@@ -182,6 +184,9 @@ def save_resource(title,url,input,userOpenId='',uploader='system'):
     r.create_time = datetime.datetime.now()
     r.save()
 
+
+@my_wrapfunc
+def save_input(userOpenId,input):
     u=User.objects.get_or_create(OpenID=userOpenId)[0]
 
     u.last_input = input
