@@ -152,11 +152,11 @@ def search_resource(queryString,userOpenId='',mod=''):
             resources.reverse()
 
         else:
-            resources = Resource_Cache.objects.filter(create_time__gt=start).filter(OpenID__iexact=userOpenId).filter(title__endswith=' '+queryString + '_' + mod).order_by("-create_time")[:10]
+            resources = Resource_Cache.objects.filter(create_time__gt=start).filter(OpenID__iexact=userOpenId).filter(title__endswith=' '+queryString + '_' + mod).order_by("-create_time")[:30]
 
     else:
         start = now-datetime.timedelta(hours=23, minutes=59, seconds=59)#缓存一天的数据 读取缓存需要修改用户id  缓存和上面的逻辑有冲突
-        resources = Resource_Cache.objects.filter(create_time__gt=start).filter(keyword__iexact=queryString+'_'+mod)[:10]#后面需要加更多限制 反正也显示不了10条
+        resources = Resource_Cache.objects.filter(create_time__gt=start).filter(keyword__iexact=queryString+'_'+mod)[:30] #应该显示不了30条吧
 
     result=[]
 
