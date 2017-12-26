@@ -49,7 +49,7 @@ def reply(MsgContent,userOpenId='',mod=''):
     if reply:
         return {'reply':reply,'mode':0}
     elif re.match('\s*\d+\s*',MsgContent):
-        return {'reply': '没有搜到对应集数 ', 'mode': 1}
+        return {'reply': '没有搜到对应集数 请重新搜索作品名称（不要带集数）', 'mode': 1}
    # elif mod and mod != 'pan':
     #    return {'reply': '没有搜到结果,你可以在标题前加上 pan 搜索云盘内容，如"pan 权力的游戏" ', 'mode': 1}
     elif time.time() - start >5:#这个不太灵，因为搜索可能就会超过6秒
@@ -177,7 +177,7 @@ def search_resource(queryString,userOpenId='',mod=''):
 
 @my_wrapfunc
 def save_resource(title,url,input,userOpenId='',uploader='system'):
-    logger.debug('save a record %s %s %s'%(url,input,userOpenId))
+    logger.debug('save a record %s %s %s %s'%(title,url,input,userOpenId))
     r = Resource_Cache.objects.get_or_create(keyword=input,url=url,OpenID=userOpenId)[0]#一个用户的同一搜索只能存一条
     r.title=title
     r.uploader = uploader
