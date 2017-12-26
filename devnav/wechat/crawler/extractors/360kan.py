@@ -6,7 +6,7 @@
 @file: 360kan.py
 @time: 2017/12/12 17:38
 """
-from ..common.crawlerTool import  crawlerTool as ct
+from ..common import  crawlerTool as ct
 from HTMLParser import HTMLParser#这个出来是unicode的格式，后面没法弄
 import sys
 reload(sys)
