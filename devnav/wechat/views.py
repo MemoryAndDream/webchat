@@ -153,3 +153,13 @@ class TextMsg(Msg):
         </xml>
         """
         return XmlForm.format(**self.__dict)
+
+
+def reply_test(request):
+    if request.method == "GET":
+        input = request.GET.get('input', '')
+        mod = request.GET.get('mod', 'qgg')
+        userOpenId = request.GET.get('userOpenId', 'okohewlbCCuGpCoYL0idJlOVDY7o')
+
+        replyContent = reply(MsgContent=input, userOpenId=userOpenId, mod=mod)['reply']
+        return HttpResponse(replyContent)
