@@ -164,8 +164,6 @@ def search_resource(queryString,userOpenId='',mod=''):
 
     for resource in resources:
         result.append('''<a href='%s'>%s</a> '''%(resource.url,resource.title.replace('_' + mod,'')))
-        if resource.uploader != 'manual':#如果人工插入不更新
-            resource.create_time = now
         resource.OpenID = userOpenId#这个是有问题的
         resource.save()
 
