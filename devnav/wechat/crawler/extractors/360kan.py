@@ -30,13 +30,19 @@ def process(keyword,page):
         for segment in segments:
             try:
                 urlinfo={}
-                localurl=ct.getRegex('(http.*?)\?', ct.getXpath('//a/@href',segment)[0])
+                localurl=ct.getXpath('//a/@href',segment)[0]
                 if localurl:
                     if 'youku' in localurl and 'url=' in localurl:
                         localurl = ct.getRegex('url=(.*?html)&', localurl)
                     else:
-                        localurl = localurl
-                    urlinfo['url']= "http://api.baiyug.cn/vip/index.php?url=" + localurl
+                        localurl = ct.getRegex('(http.*?)\?',localurl)
+                    #if 'qq' in localurl:
+                    #    localurl='http://www.82190555.com/index/qqvod.php?url=' + localurl
+                    #elif 'iqiyi' in localurl:
+                    #    localurl='http://mlxztz.com/player.php?url='+localurl
+                    #else:
+                    #    localurl='http://api.baiyug.cn/vip/index.php?url=' + localurl
+                    urlinfo['url']='http://api.baiyug.cn/vip/index.php?url=' +  localurl
                     title =HTMLParser().unescape(ct.getXpath('//a/text()',segment)[0]).replace('\r\n','')
                     urlinfo['title'] = aLevelTitle+' '+title.strip()
                     urlinfos.append(urlinfo)
@@ -53,14 +59,20 @@ def process(keyword,page):
         for segment in segments:
             try:
                 urlinfo = {}
-                localurl = ct.getRegex('(http.*?)\?',ct.getXpath('//li/a/@href', segment)[0])
+                localurl = ct.getXpath('//li/a/@href', segment)[0]
                 if localurl:
                     if 'youku' in localurl and 'url=' in localurl:
                         localurl = ct.getRegex('url=(.*?html)&', localurl)
                     else:
-                        localurl = localurl
+                        localurl = ct.getRegex('(http.*?)\?',localurl)
+                    #if 'qq' in localurl:
+                    #    localurl='http://www.82190555.com/index/qqvod.php?url=' + localurl
+                    #elif 'iqiyi' in localurl:
+                    #    localurl='http://mlxztz.com/player.php?url='+localurl
+                    #else:
+                    #    localurl='http://api.baiyug.cn/vip/index.php?url=' + localurl
                     #print '++++++++++++++++++++++++',segment
-                    urlinfo['url'] = "http://api.baiyug.cn/vip/index.php?url=" + localurl
+                    urlinfo['url'] ='http://api.baiyug.cn/vip/index.php?url='+localurl
                     title = HTMLParser().unescape(ct.getRegex('title="(.*?)"', segment))
                     titleId= ct.getRegex(u'第(\d+)期',title)
                     if titleId == '':
@@ -82,14 +94,20 @@ def process(keyword,page):
             try:
                 #print segment
                 urlinfo={}
-                localurl=ct.getRegex('(http.*?)\?', ct.getXpath('//div[@class="button-container g-clear"]/div[1]/a/@href',segment)[0])
+                localurl=ct.getXpath('//div[@class="button-container g-clear"]/div[1]/a/@href',segment)[0]
                 if 'youku' in localurl and 'url=' in localurl:
                     localurl = ct.getRegex('url=(.*?html)&', localurl)
                 else:
-                    localurl = localurl
+                    localurl = ct.getRegex('(http.*?)\?',localurl)
                 # print localurl
                 if localurl:
-                    urlinfo['url']= "http://api.baiyug.cn/vip/index.php?url=" + localurl
+                    #if 'qq' in localurl:
+                    #    localurl='http://www.82190555.com/index/qqvod.php?url=' + localurl
+                    #elif 'iqiyi' in localurl:
+                    #    localurl='http://mlxztz.com/player.php?url='+localurl
+                    #else:
+                    #    localurl='http://api.baiyug.cn/vip/index.php?url=' + localurl
+                    urlinfo['url']= 'http://api.baiyug.cn/vip/index.php?url=' + localurl
                     urlinfo['title'] =  HTMLParser().unescape(ct.getXpath('//div[@class="b-mainpic"]/a/@title',segment)[0])
                     urlinfos.append(urlinfo)
                 else:
