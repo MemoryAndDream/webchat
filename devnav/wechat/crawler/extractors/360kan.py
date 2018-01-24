@@ -35,7 +35,7 @@ def process(keyword,page):
                     if 'youku' in localurl and 'url=' in localurl:
                         localurl = ct.getRegex('url=(.*?html)&', localurl)
                     else:
-                        localurl = ct.getRegex('(http.*?)\?',localurl)
+                        localurl = localurl.split('?')[0]
                     #if 'qq' in localurl:
                     #    localurl='http://www.82190555.com/index/qqvod.php?url=' + localurl
                     #elif 'iqiyi' in localurl:
@@ -44,6 +44,7 @@ def process(keyword,page):
                     #    localurl='http://api.baiyug.cn/vip/index.php?url=' + localurl
                     urlinfo['url']='http://api.baiyug.cn/vip/index.php?url=' +  localurl
                     title =HTMLParser().unescape(ct.getXpath('//a/text()',segment)[0]).replace('\r\n','')
+                    if title == '收起':continue
                     urlinfo['title'] = aLevelTitle+' '+title.strip()
                     urlinfos.append(urlinfo)
                 else:
