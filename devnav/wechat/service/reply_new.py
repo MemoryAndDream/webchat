@@ -48,7 +48,7 @@ def reply(MsgContent,userOpenId='',mod=''):
         reply = crawler(MsgContent,userOpenId=userOpenId,sites=[19],mod=mod)
     if reply:
         return {'reply':reply,'mode':0}
-    elif re.match('\s*\d+\s*',MsgContent):
+    elif re.match('\s*\d+\s*$',MsgContent):
         return {'reply': '没有搜到对应集数 请重新搜索作品名称（不要带集数）', 'mode': 1}
    # elif mod and mod != 'pan':
     #    return {'reply': '没有搜到结果,你可以在标题前加上 pan 搜索云盘内容，如"pan 权力的游戏" ', 'mode': 1}
@@ -131,10 +131,10 @@ def search_resource(queryString,userOpenId='',mod=''):
     #这里增加一个逻辑 如果用户输入数字，则先去数据库里搜索最近一分钟title包含 数字_的结果 按时间倒序排列
     now = datetime.datetime.now()
 
-    if re.match('\s*\d+\s*',queryString):
-        page = int(queryString)
+    if re.match('\s*\d+\s*$',queryString):
         queryString = queryString.replace(' ','')
-        start = now - datetime.timedelta(hours=23, minutes=59, seconds=59)
+        page = int(queryString)
+        start = now - datetime.timedelta(hours=3, minutes=0, seconds=0)
         user = User.objects.filter(OpenID__iexact=userOpenId)
         if user: #利用user表保存keyword，防止异步 这里需要加个翻页的逻辑 后面用这种mod的模式不好
             user = user[0]
@@ -157,7 +157,7 @@ def search_resource(queryString,userOpenId='',mod=''):
             resources = Resource_Cache.objects.filter(create_time__gt=start).filter(OpenID__iexact=userOpenId).filter(title__endswith=' '+queryString + '_' + mod).order_by("-create_time")
 
     else:
-        start = now-datetime.timedelta(hours=23, minutes=59, seconds=59)#缓存一天的数据 读取缓存需要修改用户id  缓存和上面的逻辑有冲突
+        start = now-datetime.timedelta(hours=3, minutes=0, seconds=0)#缓存一天的数据 读取缓存需要修改用户id  缓存和上面的逻辑有冲突
         resources = Resource_Cache.objects.filter(create_time__gt=start).filter(keyword__iexact=queryString+'_'+mod) #应该显示不了30条吧
 
     result=[]

@@ -14,7 +14,7 @@ class Reply(models.Model):
     reply = models.CharField(max_length=100)
     weight = models.IntegerField()
     update_time = models.DateTimeField('events time',blank=True)
-    create_time = models.DateTimeField(auto_now=True,blank=True)  # 创建时间(自动获取当前时间)
+    create_time = models.DateTimeField(blank=True)  # 创建时间(自动获取当前时间)
 
     def __unicode__(self): # 将对象以str的方式显示出来
             # 在Python3中使用 def __str__(self):
@@ -28,7 +28,7 @@ class Resource(models.Model):
     request_count=  models.IntegerField(default=1)
     download_url = models.CharField(max_length=255,blank=True)
     update_time = models.DateTimeField('events time',blank=True)
-    create_time = models.DateTimeField(auto_now=True,blank=True)  # 创建时间(自动获取当前时间)
+    create_time = models.DateTimeField(blank=True)  # 创建时间(自动获取当前时间)
     verify_time = models.DateTimeField('verify time',blank=True)
     user = models.CharField(max_length=100,blank=True)#对应api的
     uploader = models.CharField(max_length=100,blank=True)#对应api的
@@ -57,7 +57,7 @@ class Resource_Cache(models.Model):
     request_count=  models.IntegerField(default=1)
     download_url = models.CharField(max_length=255,blank=True)
     update_time = models.DateTimeField('events time',blank=True)
-    create_time = models.DateTimeField(auto_now=True,blank=True)  # 创建时间(自动获取当前时间)
+    create_time = models.DateTimeField(blank=True)  # 创建时间(自动获取当前时间)
     verify_time = models.DateTimeField('verify time',blank=True)
     user = models.CharField(max_length=100,blank=True)#对应api的
     uploader = models.CharField(max_length=100,blank=True)#对应api的
@@ -68,3 +68,7 @@ class Resource_Cache(models.Model):
     def __unicode__(self): # 将对象以str的方式显示出来
             # 在Python3中使用 def __str__(self):
             return self.url+self.title
+
+class CouQian(models.Model):
+    OpenID = models.CharField(max_length=100, blank=True)
+    qian_id = models.IntegerField(blank=True)
