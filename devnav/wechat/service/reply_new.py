@@ -202,6 +202,8 @@ def chou_qian (userOpenId,type='gy'): #可以选择抽签种类
         qian_id = r.qian_id
     else:
         qian_id = random.randint(310,400) # 签的随机范围
+        r.qian_id = qian_id
+        r.save()
 
     rs = Qian.objects.filter(id__iexact=qian_id)
     if rs:
