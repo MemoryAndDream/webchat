@@ -172,7 +172,7 @@ class PicTextMsg(Msg): # 只发一条图文消息
         <ToUserName>< ![CDATA[{ToUserName}] ]></ToUserName>
         <FromUserName>< ![CDATA[{FromUserName}] ]></FromUserName>
         <CreateTime>{CreateTime}</CreateTime>
-        <MsgType>< ![CDATA[{news}] ]></MsgType>
+        <MsgType>< ![CDATA[news] ]></MsgType>
         <ArticleCount>1</ArticleCount>
         <Articles>
         <item><Title>< ![CDATA[{title}] ]></Title> 
