@@ -169,19 +169,20 @@ class PicTextMsg(Msg): # 只发一条图文消息
     def send(self):
         xmlForm = """
         <xml>
-        <ToUserName>< ![CDATA[{ToUserName}] ]></ToUserName>
-        <FromUserName>< ![CDATA[{FromUserName}] ]></FromUserName>
+        <ToUserName><![CDATA[{ToUserName}] ]></ToUserName>
+        <FromUserName><![CDATA[{FromUserName}] ]></FromUserName>
         <CreateTime>{CreateTime}</CreateTime>
-        <MsgType>< ![CDATA[news] ]></MsgType>
+        <MsgType><![CDATA[news] ]></MsgType>
         <ArticleCount>1</ArticleCount>
         <Articles>
-        <item><Title>< ![CDATA[{title}] ]></Title> 
-        <Description>< ![CDATA[{description}]]></Description>
-        <PicUrl>< ![CDATA[{picurl}] ]></PicUrl>
-        <Url>< ![CDATA[{url}] ]></Url>
+        <item><Title><![CDATA[{title}] ]></Title> 
+        <Description><![CDATA[{description}]]></Description>
+        <PicUrl><![CDATA[{picurl}] ]></PicUrl>
+        <Url><![CDATA[{url}] ]></Url>
         </item>
         </Articles></xml>
         """
+        logger.info(xmlForm.format(**self.__dict))
         return xmlForm.format(**self.__dict)
 
 def reply_test(request):
