@@ -9,7 +9,7 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf8')   
 #from service.reply import reply
-from service.reply_new import reply
+from service.reply_new import reply,chou_qian
 from service.learn import learn
 import logging
 logger = logging.getLogger('default')
@@ -62,7 +62,11 @@ def autoreply(request):
         if msg_type == 'text':
             #print MsgContent
             logger.info('in:'+str(toUser)+' '+str(MsgContent))
+            if MsgContent.startswith('新年求签'):
+                title, description, picurl, url = chou_qian(userOpenId=toUser)
+                replyMsg = PicTextMsg(toUser, fromUser, title,description,picurl,url)
 
+                return replyMsg.send()
             if MsgContent.startswith('s='):
                 learnContent = MsgContent[2:].split('w=')
                 if len(learnContent)>1:
@@ -150,6 +154,35 @@ class TextMsg(Msg):
         """
         return XmlForm.format(**self.__dict)
 
+
+class PicTextMsg(Msg): # 只发一条图文消息
+    def __init__(self, toUserName, fromUserName, title,description,picurl,url):
+        self.__dict = dict()
+        self.__dict['ToUserName'] = toUserName
+        self.__dict['FromUserName'] = fromUserName
+        self.__dict['CreateTime'] = int(time.time())
+        self.__dict['title'] = title
+        self.__dict['description'] = description
+        self.__dict['picurl'] = picurl
+        self.__dict['url'] = url
+
+    def send(self):
+        xmlForm = """
+        <xml>
+        <ToUserName>< ![CDATA[{ToUserName}] ]></ToUserName>
+        <FromUserName>< ![CDATA[{FromUserName}] ]></FromUserName>
+        <CreateTime>{CreateTime}</CreateTime>
+        <MsgType>< ![CDATA[{news}] ]></MsgType>
+        <ArticleCount>1</ArticleCount>
+        <Articles>
+        <item><Title>< ![CDATA[{title}] ]></Title> 
+        <Description>< ![CDATA[{description}]]></Description>
+        <PicUrl>< ![CDATA[{picurl}] ]></PicUrl>
+        <Url>< ![CDATA[{url}] ]></Url>
+        </item>
+        </Articles></xml>
+        """
+        return xmlForm.format(**self.__dict)
 
 def reply_test(request):
     if request.method == "GET":

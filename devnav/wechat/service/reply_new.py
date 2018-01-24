@@ -6,7 +6,7 @@
 @file: reply.py 
 @time: 2017/12/1 14:37 
 """
-from ..models import Reply,Resource,Resource_Cache,User
+from ..models import Reply,Resource,Resource_Cache,User,CouQian,Qian
 from django.db.models import Sum, Count,Avg
 import logging
 import datetime
@@ -193,3 +193,22 @@ def save_input(userOpenId,input,mod=''):
     u.last_page = 1
     u.last_request_time = datetime.datetime.now()
     u.save()
+
+@my_wrapfunc
+def chou_qian (userOpenId,type='gy'): #可以选择抽签种类
+    qian_id = 0
+    r = CouQian.objects.get_or_create(OpenID=userOpenId)[0]
+    if r.qian_id:
+        qian_id = r.qian_id
+    else:
+        qian_id = random.randint(310,400) # 签的随机范围
+
+    rs = Qian.objects.filter(id__iexact=qian_id)
+    if rs:
+        rs = rs[0]
+        title = rs.title
+        description = '新年求签'
+        picurl = rs.img_url
+        url = rs.page_url
+
+    return title, description, picurl, url

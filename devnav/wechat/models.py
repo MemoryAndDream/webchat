@@ -70,8 +70,8 @@ class Resource_Cache(models.Model):
             return self.url+self.title
 
 class CouQian(models.Model):
-    OpenID = models.CharField(max_length=100, blank=True)
-    qian_id = models.IntegerField(blank=True)
+    OpenID = models.CharField(max_length=100, blank=True,null=True)
+    qian_id = models.IntegerField(blank=True,null=True)
 
 class Qian(models.Model):
     title = models.CharField(max_length=100,blank=True)
