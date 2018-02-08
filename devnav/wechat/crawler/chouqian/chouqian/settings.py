@@ -95,4 +95,4 @@ DOWNLOADER_MIDDLEWARES = {
 MYSQL_HOST = 'localhost'
 MYSQL_DBNAME = 'mydb'
 MYSQL_USER = 'root'
-MYSQL_PASSWD = 'meng631011'
+MYSQL_PASSWD = 'password'
