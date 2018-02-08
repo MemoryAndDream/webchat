@@ -131,7 +131,7 @@ def search_resource(queryString,userOpenId='',mod=''):
     #这里增加一个逻辑 如果用户输入数字，则先去数据库里搜索最近一分钟title包含 数字_的结果 按时间倒序排列
     now = datetime.datetime.now()
 
-    if re.match('\s*\d+\s*',queryString):
+    if re.match('\s*\d+\s*$',queryString):
         queryString = queryString.replace(' ','')
         page = int(queryString)
         start = now - datetime.timedelta(hours=3, minutes=0, seconds=0)
@@ -197,7 +197,7 @@ def save_input(userOpenId,input,mod=''):
 @my_wrapfunc
 def chou_qian (userOpenId,type='gy'): #可以选择抽签种类
     qian_id = 0
-    r = CouQian.objects.get_or_create(OpenID=userOpenId,qian_id=0)[0]
+    r = CouQian.objects.get_or_create(OpenID=userOpenId)[0]
     if r.qian_id:
         qian_id = r.qian_id
     else:

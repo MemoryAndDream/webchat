@@ -53,17 +53,17 @@ class Resource_Cache(models.Model):
     keyword = models.CharField(max_length=100)
     title = models.CharField(max_length=100)
     url = models.CharField(max_length=255)
-    post_date =  models.CharField(max_length=255,blank=True,null=True)
+    post_date =  models.CharField(max_length=255,blank=True,null=True,default=None)
     request_count=  models.IntegerField(default=1,null=True)
-    download_url = models.CharField(max_length=255,blank=True,null=True)
-    update_time = models.DateTimeField('events time',blank=True,null=True)
-    create_time = models.DateTimeField(blank=True,null=True)  # 创建时间(自动获取当前时间)
-    verify_time = models.DateTimeField('verify time',blank=True,null=True)
-    user = models.CharField(max_length=100,blank=True,null=True)#对应api的
-    uploader = models.CharField(max_length=100,blank=True,null=True)#对应api的
-    type = models.CharField(max_length=100, blank=True,null=True)#以,分割各种类型
-    OpenID = models.CharField(max_length=100, blank=True,null=True)
-    UnionID = models.CharField(max_length=100, blank=True,null=True)
+    download_url = models.CharField(max_length=255,blank=True,null=True,default=None)
+    update_time = models.DateTimeField('events time',blank=True,null=True,default=None)
+    create_time = models.DateTimeField(blank=True,null=True,default=None)  # 创建时间(自动获取当前时间)
+    verify_time = models.DateTimeField('verify time',blank=True,null=True,default=None)
+    user = models.CharField(max_length=100,blank=True,null=True,default=None)#对应api的
+    uploader = models.CharField(max_length=100,blank=True,null=True,default=None)#对应api的
+    type = models.CharField(max_length=100, blank=True,null=True,default=None)#以,分割各种类型
+    OpenID = models.CharField(max_length=100, blank=True,null=True,default=None)
+    UnionID = models.CharField(max_length=100, blank=True,null=True,default=None)
 
     def __unicode__(self): # 将对象以str的方式显示出来
             # 在Python3中使用 def __str__(self):
@@ -77,5 +77,5 @@ class Qian(models.Model):
     title = models.CharField(max_length=100,blank=True)
     img_url = models.CharField(max_length=255,blank=True,null=True)
     page_url = models.CharField(max_length=255,blank=True,null=True)
-    type = models.CharField(max_length=20,blank=True,null=True)
+    type = models.CharField(max_length=20,blank=True,null=True,default=None)
     detail = models.TextField(blank=True,null=True) #null=True表示建表时该字段可以为空
