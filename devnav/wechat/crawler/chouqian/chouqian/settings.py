@@ -65,7 +65,7 @@ CONCURRENT_REQUESTS_PER_DOMAIN = 5
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'chouqian.pipelines.MysqlPipeline2': 300,
+    'chouqian.pipelines.MysqlPipeline': 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

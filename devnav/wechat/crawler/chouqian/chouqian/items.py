@@ -18,9 +18,3 @@ class ChouqianItem(scrapy.Item):
     pass
 
 
-class AlibabaItem(scrapy.Item):
-    url = scrapy.Field()
-    title = scrapy.Field()
-    category = scrapy.Field()
-    category_id = scrapy.Field()
-    QuickDetails = scrapy.Field()
