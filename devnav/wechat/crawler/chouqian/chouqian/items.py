@@ -17,4 +17,3 @@ class ChouqianItem(scrapy.Item):
     img_url = scrapy.Field()
     pass
 
-
