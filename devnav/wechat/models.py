@@ -57,7 +57,7 @@ class Resource_Cache(models.Model):
     request_count=  models.IntegerField(default=1,null=True)
     download_url = models.CharField(max_length=255,blank=True,null=True,default=None)
     update_time = models.DateTimeField('events time',blank=True,null=True,default=None)
-    create_time = models.DateTimeField(blank=True,null=True,default=None)  # 创建时间(自动获取当前时间)
+    create_time = models.DateTimeField(blank=True,null=True,default=None,db_index=True)  # 创建时间(自动获取当前时间)
     verify_time = models.DateTimeField('verify time',blank=True,null=True,default=None)
     user = models.CharField(max_length=100,blank=True,null=True,default=None)#对应api的
     uploader = models.CharField(max_length=100,blank=True,null=True,default=None)#对应api的
@@ -70,7 +70,7 @@ class Resource_Cache(models.Model):
             return self.url+self.title
 
 class CouQian(models.Model):
-    OpenID = models.CharField(max_length=100, blank=True,null=True)
+    OpenID = models.CharField(max_length=100, blank=True,null=True,unique=True)
     qian_id = models.IntegerField(blank=True,null=True,default=0)
 
 class Qian(models.Model):

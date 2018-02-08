@@ -197,12 +197,12 @@ def save_input(userOpenId,input,mod=''):
 @my_wrapfunc
 def chou_qian (userOpenId,type='gy'): #可以选择抽签种类
     qian_id = 0
-    r = CouQian.objects.get_or_create(OpenID=userOpenId,qian_id = 0)[0]
+    r = CouQian.objects.get_or_create(OpenID=userOpenId)[0]
     if r.qian_id:
         qian_id = r.qian_id
     else:
         qians = Qian.objects.filter()
-        qian_id = random.choice(qians).qian_id
+        qian_id = random.choice(qians).id
         r.qian_id = qian_id
         r.save()
 
