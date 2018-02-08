@@ -62,7 +62,7 @@ def autoreply(request):
         if msg_type == 'text':
             #print MsgContent
             logger.info('in:'+str(toUser)+' '+str(MsgContent))
-            if MsgContent.startswith('新年求签'):
+            if MsgContent.endswith('保佑'):
                 title, description, picurl, url = chou_qian(userOpenId=toUser)
                 replyMsg = PicTextMsg(toUser, fromUser, title,description,picurl,url)
 

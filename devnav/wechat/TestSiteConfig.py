@@ -5,4 +5,4 @@ if __name__=='__main__':
     #mo =importlib.import_module('.'.join(["crawler",'extractors','universal']))
     mo =importlib.import_module('.'.join(["crawler",'extractors','360kan']))
 
-    print mo.process("暴走恐怖故事 第五季",'1')
+    print mo.process("我的青春遇见你",'1')

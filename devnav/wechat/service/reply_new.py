@@ -176,7 +176,7 @@ def search_resource(queryString,userOpenId='',mod=''):
 @my_wrapfunc
 def save_resource(title,url,input,userOpenId='',uploader='system'):
     logger.debug('save a record %s %s %s %s'%(title,url,input,userOpenId))
-    r = Resource_Cache.objects.get_or_create(keyword=input,url=url,OpenID=userOpenId)[0]#一个用户的同一搜索只能存一条
+    r = Resource_Cache.objects.create(keyword=input,url=url,OpenID=userOpenId)#一个用户的同一搜索只能存一条
     r.title=title
     r.uploader = uploader
     r.create_time = datetime.datetime.now()
@@ -201,7 +201,8 @@ def chou_qian (userOpenId,type='gy'): #可以选择抽签种类
     if r.qian_id:
         qian_id = r.qian_id
     else:
-        qian_id = random.randint(310,400) # 签的随机范围
+        qians = Qian.objects.filter()
+        qian_id = random.choice(qians).qian_id
         r.qian_id = qian_id
         r.save()
 
