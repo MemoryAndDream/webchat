@@ -131,7 +131,7 @@ def search_resource(queryString,userOpenId='',mod=''):
     #这里增加一个逻辑 如果用户输入数字，则先去数据库里搜索最近一分钟title包含 数字_的结果 按时间倒序排列
     now = datetime.datetime.now()
 
-    if re.match('\s*\d+\s*$',queryString):
+    if re.match('\s*\d+\s*',queryString):
         queryString = queryString.replace(' ','')
         page = int(queryString)
         start = now - datetime.timedelta(hours=3, minutes=0, seconds=0)
