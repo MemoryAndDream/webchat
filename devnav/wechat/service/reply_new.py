@@ -16,6 +16,7 @@ import time
 from ..crawler.mainprocess import keywordSearch
 from ..crawler.common.crawlerTool import crawlerTool as ct
 import re
+import random
 
 logger = logging.getLogger('default')
 
@@ -57,7 +58,7 @@ def reply(MsgContent,userOpenId='',mod=''):
     else:
         return {'reply':'没有搜到结果','mode':1}
 
-import random
+
 
 #骂人回复
 @my_wrapfunc
@@ -72,6 +73,15 @@ def maRen():
     return reply
 
 
+
+
+def url_wraper(url):
+    if '?' in url:
+        url = url+'&rd=%s'%random.randint(0,999)
+    else:
+        url = url + '?rd=%s'%random.randint(0,999)
+
+
 #爬虫回复
 @my_wrapfunc
 def crawler(keyword,userOpenId='',sites=[19],mod=''):
@@ -81,7 +91,7 @@ def crawler(keyword,userOpenId='',sites=[19],mod=''):
     for urlinfo in urlinfos:
         title = urlinfo.get('title','').replace("'",'"')
         url = urlinfo.get('url','')
-        rs.append('''<a href='%s'>%s</a> '''%(url,title))
+        rs.append('''<a href='%s'>%s</a> '''%(url_wraper(url),title))
         if title and url:
             #save_resource_task.delay(title+'_'+mod,url,keyword,userOpenId=userOpenId)  #异步发现不靠谱
             save_resource(title + '_' + mod, url, keyword+ '_' + mod, userOpenId=userOpenId)
@@ -163,7 +173,7 @@ def search_resource(queryString,userOpenId='',mod=''):
     result=[]
 
     for resource in resources:
-        result.append('''<a href='%s'>%s</a> '''%(resource.url,resource.title.replace('_' + mod,'')))
+        result.append('''<a href='%s'>%s</a> '''%(url_wraper(resource.url),resource.title.replace('_' + mod,'')))
         resource.OpenID = userOpenId#这个是有问题的
         resource.save()
 
