@@ -80,6 +80,7 @@ def url_wraper(url):
         url = url+'&rd=%s'%random.randint(0,999)
     else:
         url = url + '?rd=%s'%random.randint(0,999)
+    return url
 
 
 #爬虫回复
