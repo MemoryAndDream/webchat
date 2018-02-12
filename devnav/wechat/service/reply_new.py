@@ -43,10 +43,7 @@ def reply(MsgContent,userOpenId='',mod=''):
 淘宝优惠
 
 精选淘宝/天猫最热门优惠券
-￥mtxE0n4fDcz￥ 精选淘宝/天猫最热门优惠券，复制淘口令之后打开淘宝领取
-
-精选淘宝/天猫最热门优惠券搜索
-￥VGTj0n4UvCb￥ 精选淘宝/天猫最热门优惠券搜索，复制淘口令之后打开淘宝即可搜索
+￥mtxE0n4fDcz￥ 精选淘宝/天猫最热门优惠券，复制本段文字后打开淘宝领取
 
 更多优惠收集中，有好的建议请留言,用户就是上帝！(◕ᴗ◕✿)''', 'mode': 0}
     queryResult = search_resource(MsgContent,userOpenId,mod=mod)
