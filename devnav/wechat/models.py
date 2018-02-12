@@ -9,6 +9,7 @@ from django.db import models
 
 # Create your models here.
 
+#ORM真tm难用！
 
 class Reply(models.Model):
     reply = models.CharField(max_length=100)
@@ -41,13 +42,13 @@ class Resource(models.Model):
             return self.url+self.title
 
 class User(models.Model):
-    name = models.CharField(max_length=100, blank=True,null=True)
+    name = models.CharField(max_length=100, blank=True,null=True,default=None)
     OpenID = models.CharField(max_length=100, blank=True)
-    UnionID = models.CharField(max_length=100, blank=True,null=True)
-    last_input = models.CharField(max_length=100, blank=True,null=True)
-    keyword = models.CharField(max_length=100, blank=True,null=True)
+    UnionID = models.CharField(max_length=100, blank=True,null=True,default=None)
+    last_input = models.CharField(max_length=100, blank=True,null=True,default=None)
+    keyword = models.CharField(max_length=100, blank=True,null=True,default=None)
     last_page = models.IntegerField(default=1, blank=True,null=True)
-    last_request_time = models.DateTimeField(auto_now=True,blank=True,null=True)
+    last_request_time = models.DateTimeField(auto_now=True,blank=True,null=True,default=None)
 
 class Resource_Cache(models.Model):
     keyword = models.CharField(max_length=100)
@@ -74,8 +75,8 @@ class CouQian(models.Model):
     qian_id = models.IntegerField(blank=True,null=True,default=0)
 
 class Qian(models.Model):
-    title = models.CharField(max_length=100,blank=True)
-    img_url = models.CharField(max_length=255,blank=True,null=True)
-    page_url = models.CharField(max_length=255,blank=True,null=True)
+    title = models.CharField(max_length=100,blank=True,default=None)
+    img_url = models.CharField(max_length=255,blank=True,null=True,default=None)
+    page_url = models.CharField(max_length=255,blank=True,null=True,default=None)
     type = models.CharField(max_length=20,blank=True,null=True,default=None)
-    detail = models.TextField(blank=True,null=True) #null=True表示建表时该字段可以为空
+    detail = models.TextField(blank=True,null=True,default=None) #null=True表示建表时该字段可以为空

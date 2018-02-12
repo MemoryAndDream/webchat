@@ -1,39 +1,38 @@
 表及索引
 | wechat_resource_cache | CREATE TABLE `wechat_resource_cache` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `keyword` varchar(100) NOT NULL,
-  `title` varchar(100) NOT NULL,
-  `url` varchar(255) NOT NULL,
-  `post_date` varchar(255) NOT NULL,
-  `request_count` int(11) NOT NULL,
-  `download_url` varchar(255) NOT NULL,
+  `keyword` varchar(100) DEFAULT NULL,
+  `title` varchar(100) DEFAULT NULL,
+  `url` varchar(255) DEFAULT NULL,
+  `post_date` varchar(255) DEFAULT NULL,
+  `request_count` int(11) DEFAULT NULL,
+  `download_url` varchar(100) DEFAULT NULL,
   `update_time` datetime DEFAULT NULL,
   `create_time` datetime DEFAULT NULL,
   `verify_time` datetime DEFAULT NULL,
-  `user` varchar(100) NOT NULL,
-  `uploader` varchar(100) NOT NULL,
-  `type` varchar(100) NOT NULL,
+  `user` varchar(100) DEFAULT NULL,
+  `uploader` varchar(100) DEFAULT NULL,
+  `type` varchar(100) DEFAULT NULL,
   `OpenID` varchar(100) NOT NULL,
-  `UnionID` varchar(100) NOT NULL,
+  `UnionID` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `OpenID` (`OpenID`),
   KEY `keyword` (`keyword`),
   KEY `index_name` (`create_time`)
-) ENGINE=InnoDB AUTO_INCREMENT=16570 DEFAULT CHARSET=utf8 |
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 |
 
 wechat_user
-CREATE TABLE `wechat_user` (
+| wechat_user | CREATE TABLE `wechat_user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) DEFAULT NULL,
+  `name` varchar(100) DEFAULT '',
   `OpenID` varchar(100) NOT NULL,
   `UnionID` varchar(100) DEFAULT NULL,
-  `last_input` varchar(255) DEFAULT NULL,
+  `keyword` varchar(100) DEFAULT NULL,
+  `last_input` varchar(100) DEFAULT '',
   `last_page` int(11) DEFAULT NULL,
   `last_request_time` datetime DEFAULT NULL,
-  `keyword` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `openid` (`OpenID`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5549 DEFAULT CHARSET=utf8 |
 
 
 
@@ -52,3 +51,7 @@ ALTER TABLE `wechat_user` ADD UNIQUE ( `OpenID` )
 b站
 
 文章写不来就搬运 比如草榴？今日头条
+
+select count(*) as count,keyword from wechat_user  where last_request_time > '2018-02-08' group by keyword order by count;
+
+新建github page以处理举报问题

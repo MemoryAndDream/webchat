@@ -36,6 +36,19 @@ def reply(MsgContent,userOpenId='',mod=''):
     start = time.time()
     save_input(userOpenId,MsgContent,mod=mod)
     logger.debug('input:%s userId:%s mod:%s'%(MsgContent,str(userOpenId),mod))
+    if '看不了' in MsgContent:
+        return {'reply': '如果播放失败请尝试重新打开链接，或者将问题留言在任意的推送文章中，我们会尽快修复，谢谢', 'mode': 0}
+    if '优惠' in MsgContent:
+        return {'reply': '''
+淘宝优惠
+
+精选淘宝/天猫最热门优惠券
+￥mtxE0n4fDcz￥ 精选淘宝/天猫最热门优惠券，复制淘口令之后打开淘宝领取
+
+精选淘宝/天猫最热门优惠券搜索
+￥VGTj0n4UvCb￥ 精选淘宝/天猫最热门优惠券搜索，复制淘口令之后打开淘宝即可搜索
+
+更多优惠收集中，有好的建议请留言,用户就是大爷！￣へ￣''', 'mode': 0}
     queryResult = search_resource(MsgContent,userOpenId,mod=mod)
     if queryResult:#这个逻辑后面得改，不兼容搜索，要么就是根据公众号类型不同返回
        return {'reply': queryResult, 'mode': 0}

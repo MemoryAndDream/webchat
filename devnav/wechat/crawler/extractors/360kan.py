@@ -46,6 +46,8 @@ def process(keyword,page):
                         #urlinfo['url']='http://api.baiyug.cn/vip/index.php?url=' + localurl
                         title =HTMLParser().unescape(ct.getXpath('//a/text()',segment)[0]).replace('\r\n','')
                         urlinfo['title'] = aLevelTitle+' '+title.strip()
+                        if '小美好' in aLevelTitle:
+                            urlinfo['url'] = 'https://memoryanddream.github.io?url=' + localurl
                         if title == '收起':continue
                         urlinfos.append(urlinfo)
                     else:
