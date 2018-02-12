@@ -48,7 +48,7 @@ def reply(MsgContent,userOpenId='',mod=''):
 精选淘宝/天猫最热门优惠券搜索
 ￥VGTj0n4UvCb￥ 精选淘宝/天猫最热门优惠券搜索，复制淘口令之后打开淘宝即可搜索
 
-更多优惠收集中，有好的建议请留言,用户就是大爷！￣へ￣''', 'mode': 0}
+更多优惠收集中，有好的建议请留言,用户就是上帝！(◕ᴗ◕✿)''', 'mode': 0}
     queryResult = search_resource(MsgContent,userOpenId,mod=mod)
     if queryResult:#这个逻辑后面得改，不兼容搜索，要么就是根据公众号类型不同返回
        return {'reply': queryResult, 'mode': 0}
